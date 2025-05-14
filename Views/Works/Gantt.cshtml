@@ -1,0 +1,259 @@
+﻿@* Views/Works/Gantt.cshtml *@
+@model TaskWorkManagement.Models.WorkGanttViewModel
+
+@{
+    ViewData["Title"] = "任务甘特图";
+}
+
+<h1>任务甘特图</h1>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <button id="prev-week" class="btn btn-outline-secondary">上一周</button>
+            <button id="today" class="btn btn-outline-primary">今天</button>
+            <button id="next-week" class="btn btn-outline-secondary">下一周</button>
+        </div>
+        <button id="add-task" class="btn btn-success float-right" data-toggle="modal" data-target="#taskModal">
+            <i class="fas fa-plus"></i> 添加任务
+        </button>
+    </div>
+</div>
+
+<div class="gantt-container">
+    <div class="gantt-header">
+        <div class="gantt-row">
+            <div class="gantt-cell member-header">成员</div>
+            @for (var date = Model.StartDate; date <= Model.EndDate; date = date.AddDays(1))
+            {
+                <div class="gantt-cell day-header @(date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday ? "weekend" : "")">
+                    @date.ToString("MM/dd")<br />@date.DayOfWeek.ToString().Substring(0, 3)
+                </div>
+            }
+        </div>
+    </div>
+    <div class="gantt-body">
+        @foreach (var member in Model.Members)
+        {
+            <div class="gantt-row" data-member-id="@member.MemberId">
+                <div class="gantt-cell member-cell" style="background-color: @member.Color">
+                    @member.MemberName
+                </div>
+                @for (var date = Model.StartDate; date <= Model.EndDate; date = date.AddDays(1))
+                {
+                    <div class="gantt-cell day-cell @(date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday ? "weekend" : "")"
+                         data-date="@date.ToString("yyyy-MM-dd")" data-member-id="@member.MemberId">
+                        @foreach (var work in member.MemberWorks.Select(mw => mw.Work).Where(w => w.StartDate <= date && w.DueDate >= date))
+                        {
+                            <div class="gantt-task"
+                                 data-task-id="@work.WorkId"
+                                 style="background-color: @work.Color; width: calc(@work.Duration * 100% - 2px);"
+                                 title="@work.Title (优先级: @work.Priority)">
+                                @work.Title
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Task Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskModalLabel">添加/编辑任务</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <input type="hidden" id="taskId" />
+                    <div class="form-group">
+                        <label for="taskTitle">任务标题</label>
+                        <input type="text" class="form-control" id="taskTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">任务描述</label>
+                        <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskStartDate">开始日期</label>
+                        <input type="date" class="form-control" id="taskStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDuration">持续时间(天)</label>
+                        <input type="number" class="form-control" id="taskDuration" min="1" max="365" value="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskPriority">优先级 (1-5)</label>
+                        <input type="number" class="form-control" id="taskPriority" min="1" max="5" value="3" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskMembers">负责成员</label>
+                        <select multiple class="form-control" id="taskMembers">
+                            @foreach (var member in Model.Members)
+                            {
+                                <option value="@member.MemberId">@member.MemberName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskColor">颜色</label>
+                        <input type="color" class="form-control" id="taskColor" value="#3498db">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="saveTask">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .gantt-container {
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+
+        .gantt-row {
+            display: flex;
+            min-width: 100%;
+            height: 50px;
+        }
+
+        .gantt-cell {
+            min-width: 80px;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            position: relative;
+            padding: 2px;
+        }
+
+        .member-header, .member-cell {
+            min-width: 120px;
+            max-width: 120px;
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background-color: #f8f9fa;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-cell {
+            background-color: #e9ecef;
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.8rem;
+            background-color: #f8f9fa;
+        }
+
+        .day-cell {
+            background-color: white;
+        }
+
+        .weekend {
+            background-color: #f1f1f1;
+        }
+
+        .gantt-task {
+            height: 30px;
+            margin: 8px 0;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: white;
+            font-size: 0.8rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: move;
+            position: absolute;
+            z-index: 1;
+        }
+
+            .gantt-task:hover {
+                opacity: 0.9;
+                box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 日期导航
+            $('#prev-week').click(function() {
+                window.location.href = '@Url.Action("Gantt")?startDate=@Model.StartDate.AddDays(-7).ToString("yyyy-MM-dd")&endDate=@Model.EndDate.AddDays(-7).ToString("yyyy-MM-dd")';
+            });
+
+            $('#today').click(function() {
+                window.location.href = '@Url.Action("Gantt")';
+            });
+
+            $('#next-week').click(function() {
+                window.location.href = '@Url.Action("Gantt")?startDate=@Model.StartDate.AddDays(7).ToString("yyyy-MM-dd")&endDate=@Model.EndDate.AddDays(7).ToString("yyyy-MM-dd")';
+            });
+
+            // 初始化拖放功能
+            interact('.gantt-task').draggable({
+                inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: 'parent',
+                        endOnly: true
+                    })
+                ],
+                autoScroll: true,
+                listeners: {
+                    move: dragMoveListener
+                }
+            });
+
+            function dragMoveListener(event) {
+                var target = event.target;
+                var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+            }
+
+            // 保存任务
+            $('#saveTask').click(function() {
+                // 这里添加保存任务的AJAX调用
+                alert('任务已保存');
+                $('#taskModal').modal('hide');
+            });
+
+            // 点击单元格添加任务
+            $('.day-cell').click(function() {
+                var date = $(this).data('date');
+                var memberId = $(this).data('member-id');
+
+                $('#taskStartDate').val(date);
+                $('#taskMembers').val([memberId]);
+                $('#taskModal').modal('show');
+            });
+
+            // 双击任务编辑
+            $('.gantt-task').dblclick(function() {
+                var taskId = $(this).data('task-id');
+                // 这里添加获取任务详情的AJAX调用
+                $('#taskModal').modal('show');
+            });
+        });
+    </script>
+}
