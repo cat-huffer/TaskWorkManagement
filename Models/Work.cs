@@ -6,38 +6,38 @@ namespace TaskWorkManagement.Models
     {
         public int WorkId { get; set; }
 
-        [Required(ErrorMessage = "任务标题不能为空")]
-        [Display(Name = "任务")]
+        [Required(ErrorMessage = "タスク名を入力してください")]
+        [Display(Name = "タスク名")]
         public string Title { get; set; }
 
-        [Display(Name = "任务描述")]
+        [Display(Name = "詳細")]
         public string? Description { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "开始日期")]
+        [Display(Name = "登録日")]
         public DateTime StartDate { get; set; } = DateTime.Today;
 
         [DataType(DataType.Date)]
-        [Required(ErrorMessage = "截止日期不能为空")]
-        [Display(Name = "截止日期")]
+        [Required(ErrorMessage = "締切日を入力してください")]
+        [Display(Name = "締切日")]
         public DateTime DueDate { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "完成日期")]
+        [Display(Name = "完了日")]
         public DateTime? CompletedDate { get; set; }
 
-        [Display(Name = "是否完成")]
+        [Display(Name = "完了済み")]
         public bool IsCompleted { get; set; } = false;
 
-        [Display(Name = "优先级")]
-        [Range(1, 5, ErrorMessage = "优先级必须在1-5之间")]
+        [Display(Name = "優先度")]
+        [Range(1, 5, ErrorMessage = "優先度は1～5の範囲で設定してください")]
         public int Priority { get; set; } = 3;
 
-        [Display(Name = "持续时间(天)")]
-        [Range(1, 365, ErrorMessage = "持续时间必须在1-365天之间")]
+        [Display(Name = "所要時間")]
+        [Range(1, 365, ErrorMessage = "所要時間は1～365日の範囲で設定してください")]
         public int Duration { get; set; } = 1;
 
-        [Display(Name = "颜色")]
+        [Display(Name = "カラー")]
         public string Color { get; set; } = "#3498db";
 
         public ICollection<MemberWork> MemberWorks { get; set; } = new List<MemberWork>();

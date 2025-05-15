@@ -5,18 +5,17 @@
     ViewData["Title"] = "任务列表";
 }
 
-<h1>任务列表</h1>
+<h1>作業一覧</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">新建任务</a>
-    <a asp-action="Gantt" class="btn btn-success">查看甘特图</a>
+    <a asp-action="Create" class="btn btn-primary">新規タスク作成</a>
 </p>
 
-<div class="row">
-    <div class="col-md-3">
+<div class="row align-items-start">
+    <div class="col-md-2">
         <div class="card">
             <div class="card-header">
-                <h5>成员列表</h5>
+                <h5>メンバー一覧</h5>
             </div>
             <div class="card-body">
                 <ul class="list-group">
@@ -31,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-10">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -64,21 +63,21 @@
                         <td>
                             @if (work.IsCompleted)
                             {
-                                <span class="badge badge-success">已完成</span>
+                                <span class="badge badge-success">完了</span>
                             }
                             else if (work.DueDate < DateTime.Today)
                             {
-                                <span class="badge badge-danger">已过期</span>
+                                <span class="badge badge-danger">期限切れ</span>
                             }
                             else
                             {
-                                <span class="badge badge-primary">进行中</span>
+                                <span class="badge badge-primary">進行中</span>
                             }
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-primary">编辑</a>
-                            <a asp-action="Details" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-info">详情</a>
-                            <a asp-action="Delete" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-danger">删除</a>
+                            <a asp-action="Edit" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-primary">編集</a>
+                            <a asp-action="Details" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-info">詳細</a>
+                            <a asp-action="Delete" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-danger">削除</a>
                         </td>
                     </tr>
                 }

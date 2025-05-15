@@ -31,7 +31,7 @@ namespace Login.Controllers
         {
             if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
             {
-                ViewBag.Msg = "用户名或密码为空";
+                ViewBag.Msg = "ユーザー名またはパスワードが空です";
                 return View("Index", user);
             }
             else
@@ -44,7 +44,7 @@ namespace Login.Controllers
                 }
                 else
                 {
-                    ViewBag.Msg = "用户名或密码验证错误";
+                    ViewBag.Msg = "ユーザー名またはパスワードが間違っています";
                     return View("Index", user);
                 }
 
