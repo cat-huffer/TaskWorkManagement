@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>詳細</h1>
 
 <div>
-    <h4>Work</h4>
+    <h4>タスク</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -52,21 +52,10 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Priority)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.WorkId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.WorkId">編集</a> |
+    <a asp-action="Index">リストに戻る</a>
 </div>

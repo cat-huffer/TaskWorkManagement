@@ -29,10 +29,10 @@ namespace TaskManagement.Controllers
                 .ToListAsync();
 
             var works = await _context.Work
-                .Include(w => w.MemberWorks)
+                .Include(w => w.MemberWorks)// 类似于SQL中的左连接
                 .ThenInclude(mw => mw.Member)
-                .OrderBy(w => w.Priority)
-                .ThenBy(w => w.DueDate)
+                .OrderBy(w => w.DueDate)
+                .ThenByDescending(w => w.Priority)
                 .ToListAsync();
 
             var model = new WorkIndexViewModel
@@ -100,7 +100,7 @@ namespace TaskManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkId,Title,Description,AssignedDate,DueDate,CompletedDate,IsCompleted")] Work work)
+        public async Task<IActionResult> Create([Bind("WorkId,Title,Description,StartDate,DueDate,CompletedDate,IsCompleted,Priority")] Work work)
         {
             if (ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace TaskManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WorkId,Title,Description,AssignedDate,DueDate,CompletedDate,IsCompleted")] Work work)
+        public async Task<IActionResult> Edit(int id, [Bind("WorkId,Title,Description,StartDate,DueDate,CompletedDate,IsCompleted,Priority")] Work work)// bind 限制绑定的属性,只绑定指定的属性
         {
             if (id != work.WorkId)
             {

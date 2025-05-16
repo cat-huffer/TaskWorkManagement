@@ -36,7 +36,7 @@
         @foreach (var member in Model.Members)
         {
             <div class="gantt-row" data-member-id="@member.MemberId">
-                <div class="gantt-cell member-cell" style="background-color: @member.Color">
+                <div class="gantt-cell member-cell" style="background-color: blue">
                     @member.MemberName
                 </div>
                 @for (var date = Model.StartDate; date <= Model.EndDate; date = date.AddDays(1))
@@ -46,8 +46,7 @@
                         @foreach (var work in member.MemberWorks.Select(mw => mw.Work).Where(w => w.StartDate <= date && w.DueDate >= date))
                         {
                             <div class="gantt-task"
-                                 data-task-id="@work.WorkId"
-                                 style="background-color: @work.Color; width: calc(@work.Duration * 100% - 2px);"
+                                 data-task-id="@work.WorkId"                                
                                  title="@work.Title (优先级: @work.Priority)">
                                 @work.Title
                             </div>

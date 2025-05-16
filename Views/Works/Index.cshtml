@@ -2,26 +2,24 @@
 @model TaskWorkManagement.Models.WorkIndexViewModel
 
 @{
-    ViewData["Title"] = "任务列表";
+    ViewData["Title"] = "作業一覧";
 }
-
-<h1>作業一覧</h1>
-
 <p>
     <a asp-action="Create" class="btn btn-primary">新規タスク作成</a>
 </p>
 
-<div class="row align-items-start">
+@*创建水平排列的弹性容器，并控制其子元素（列）在垂直方向上的对齐方式*@
+<div class="row align-items-start"> 
     <div class="col-md-2">
         <div class="card">
             <div class="card-header">
-                <h5>メンバー一覧</h5>
+                <h5>メンバー</h5>
             </div>
             <div class="card-body">
                 <ul class="list-group">
                     @foreach (var member in Model.Members)
                     {
-                        <li class="list-group-item d-flex justify-content-between align-items-center" style="border-left: 5px solid @member.Color;">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="border-left: 5px solid ;">
                             @member.MemberName
                             <span class="badge badge-primary badge-pill">@member.MemberWorks.Count</span>
                         </li>
@@ -34,12 +32,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>任务</th>
-                    <th>优先级</th>
-                    <th>开始日期</th>
-                    <th>截止日期</th>
-                    <th>持续时间</th>
-                    <th>状态</th>
+                    <th>作業</th>
+                    <th>優先度</th>
+                    <th>開始日</th>
+                    <th>期限日</th>
+                    <th>完了日</th>
+                    <th>状態</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -48,30 +46,36 @@
                 {
                     <tr>
                         <td>
-                            <span style="display: inline-block; width: 10px; height: 10px; background-color: @work.Color; margin-right: 5px;"></span>
+                            @*@{
+                                var priorityColor = work.Priority switch
+                                {
+                                    2 => "darkblue",      // 高い (高优先级)
+                                    1 => "blue", // 中 (中优先级)
+                                    0 => "deepskyblue",    // 低い (低优先级)
+                                };
+                            }*@
+                            <span style="display: inline-block; width: 10px; height: 10px; background-color: deepskyblue; margin-right: 5px;"></span>
                             @work.Title
                         </td>
                         <td>
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                <i class="fas fa-star @(i <= work.Priority ? "text-warning" : "text-muted")"></i>
-                            }
+                            @work.Priority.ToString()
+
                         </td>
                         <td>@work.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>@work.DueDate.ToString("yyyy-MM-dd")</td>
-                        <td>@work.Duration 天</td>
+                        <td>@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "NULL")</td>
                         <td>
                             @if (work.IsCompleted)
                             {
-                                <span class="badge badge-success">完了</span>
+                                <span class="badge badge-success" style="color: black;">完了</span>
                             }
                             else if (work.DueDate < DateTime.Today)
                             {
-                                <span class="badge badge-danger">期限切れ</span>
+                                <span class="badge badge-danger" style="color: red;">期限切れ</span>
                             }
                             else
                             {
-                                <span class="badge badge-primary">進行中</span>
+                                <span class="badge badge-primary" style="color: green;">進行中</span>
                             }
                         </td>
                         <td>

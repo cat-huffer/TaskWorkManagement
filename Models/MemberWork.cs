@@ -6,7 +6,7 @@ namespace TaskWorkManagement.Models
     {
         public int MemberWorkId { get; set; }
 
-        [Display(Name = "角色")]
+        [Display(Name = "役割")]
         public string? Role { get; set; } // 如"负责人","参与者"
 
         public int WorkId { get; set; }

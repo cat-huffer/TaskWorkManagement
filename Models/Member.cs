@@ -8,14 +8,11 @@ namespace TaskWorkManagement.Models
 
         [Required]
         [StringLength(10)]
-        [Display(Name = "成员姓名")]
+        [Display(Name = "メンバー名")]
         public string MemberName { get; set; }
 
-        [Display(Name = "职位")]
+        [Display(Name = "ポジション")]
         public string? Position { get; set; }
-
-        [Display(Name = "颜色")]
-        public string Color { get; set; } = "#e74c3c";
 
         public ICollection<MemberWork> MemberWorks { get; set; } = new List<MemberWork>();
     }
