@@ -1,4 +1,4 @@
-html {
+﻿/*html {
   font-size: 14px;
 }
 
@@ -28,4 +28,78 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}*/
+
+/* 全局样式 */
+body {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* 导航栏样式 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* 主内容区域 */
+main {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,.05);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* 页脚样式 */
+footer {
+    margin-top: 50px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    main {
+        padding: 15px;
+    }
+}
+
+/* 自定义按钮样式 */
+.btn-custom {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    transition: all 0.3s;
+}
+
+    .btn-custom:hover {
+        background-color: #5a6268;
+        color: white;
+    }
+
+/* 面包屑导航调整 */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.75rem 0;
+    margin-bottom: 1rem;
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
 }

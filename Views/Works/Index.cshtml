@@ -63,7 +63,7 @@
                         </td>
                         <td>@work.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>@work.DueDate.ToString("yyyy-MM-dd")</td>
-                        <td>@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "NULL")</td>
+                        <td>@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "なし")</td>
                         <td>
                             @if (work.IsCompleted)
                             {

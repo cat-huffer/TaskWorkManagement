@@ -22,7 +22,8 @@ namespace TaskManagement.Controllers
         }
 
         // GET: Works
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()//TODO 修改表的排序;修改日期部分
+                                                //TODO 任务列表标签居中
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)
@@ -31,8 +32,8 @@ namespace TaskManagement.Controllers
             var works = await _context.Work
                 .Include(w => w.MemberWorks)// 类似于SQL中的左连接
                 .ThenInclude(mw => mw.Member)
-                .OrderBy(w => w.DueDate)
-                .ThenByDescending(w => w.Priority)
+                .OrderBy(w => w.Priority)
+                .ThenByDescending(w => w.DueDate)
                 .ToListAsync();
 
             var model = new WorkIndexViewModel
@@ -60,15 +61,51 @@ namespace TaskManagement.Controllers
                 .ThenBy(w => w.DueDate)
                 .ToListAsync();
 
+            var latestTime = _context.Work
+                .Where(w=>!w.IsCompleted)
+                .OrderByDescending(w => w.StartDate)//将较晚的日期排在前面
+                .Select(w => w.StartDate)
+                .FirstOrDefault();//没有数据时会返回 default(DateTime)
+
+            if (latestTime == default(DateTime))
+            {
+                latestTime = DateTime.Today;
+            }
+
             var model = new WorkGanttViewModel
             {
                 Members = members,
                 Works = works,
-                StartDate = DateTime.Today.AddDays(-7),
+                StartDate = latestTime,
                 EndDate = DateTime.Today.AddDays(30)
             };
 
             return View(model);
+        }
+                
+        [HttpGet]
+        public async Task<IActionResult> GetWorkDetails(int id)
+        {
+            var work = await _context.Work
+                .Include(w => w.MemberWorks)
+                .ThenInclude(mw => mw.Member)
+                .FirstOrDefaultAsync(w => w.WorkId == id);
+
+            if (work == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new
+            {
+                title = work.Title,
+                description = work.Description,
+                startDate = work.StartDate.ToString("yyyy-MM-dd"),
+                dueDate = work.DueDate.ToString("yyyy-MM-dd"),
+                isCompleted = work.IsCompleted,
+                priority = (int)work.Priority,
+                members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList()
+            });
         }
 
         // GET: Works/Details/5

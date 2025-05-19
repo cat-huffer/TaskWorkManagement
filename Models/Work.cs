@@ -7,8 +7,8 @@ namespace TaskWorkManagement.Models
     {
         public int WorkId { get; set; }
 
-        [Required(ErrorMessage = "タスク名を入力してください")]
-        [Display(Name = "タスク名")]
+        [Required(ErrorMessage = "作業名を入力してください")]
+        [Display(Name = "作業名")]
         public string Title { get; set; }
 
         [Display(Name = "詳細")]

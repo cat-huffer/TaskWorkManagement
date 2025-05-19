@@ -11,6 +11,8 @@
     <Content Remove="Views\Login\Delete.cshtml" />
     <Content Remove="Views\Login\Details.cshtml" />
     <Content Remove="Views\Login\Edit.cshtml" />
+    <Content Remove="Views\Shared\_AlertMessages.cshtml" />
+    <Content Remove="Views\Shared\_Breadcrumb.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
