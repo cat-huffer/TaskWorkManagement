@@ -17,97 +17,84 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- Bootstrap 导航栏 -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-home me-1"></i>作業管理
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Works" asp-action="Index">
-                                <i class="far fa-bars" /></i>作業一覧
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Works" asp-action="Gantt">
-                                <i class="fas fa-shield-alt me-1"></i>作業管理
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Works" asp-action="Gantt">
-                                <i class="fas fa-shield-alt me-1"></i>メンバー
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Works" asp-action="Gantt">
-                                <i class="fal fa-cogs"></i>メンバー
-                            </a>
-                        </li>
-                        @* <li class="nav-item dropdown"> *@
-                        @*     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"> *@
-                        @*         <i class="fas fa-cog me-1"></i>管理 *@
-                        @*     </a> *@
-                            @* <ul class="dropdown-menu"> *@
-                            @*     <li><a class="dropdown-item" href="#">用户管理</a></li> *@
-                            @*     <li><a class="dropdown-item" href="#">系统设置</a></li> *@
-                            @*     <li><hr class="dropdown-divider"></li> *@
-                            @*     <li><a class="dropdown-item" href="#">日志查看</a></li> *@
-                            @* </ul> *@
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <!-- 左侧空白占位(保持平衡) -->
+                @* <div class="d-none d-lg-flex col-lg-2"></div> *@
+                
+                <!-- 中间导航图标(居中) -->
+                <div class="col-lg-12 d-flex justify-content-center">
+                    <!-- 移动端折叠按钮 -->
+                    <button class="navbar-toggler ms-auto me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Index" title="ホーム">
+                                    <img src="/images/home.png" class ="navi-image">
+                                    <span style="color:#667eea">ホーム</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link head-bond-color" asp-controller="Works" asp-action="Index" title="作業一覧">
+                                    <img src="/images/list.png" class="navi-image">
+                                    <span style="color:#667eea">作業一覧</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link head-bond-color" asp-controller="Works" asp-action="Gantt" title="作業管理">
+                                    <img src="/images/project.png" class="navi-image">
+                                    <span style="color:#667eea">作業管理</span>
+                                </a>
+                            </li>
+                            <li class="nav-item head-bond-color">
+                                <a class="nav-link" asp-controller="Members" asp-action="Index" title="メンバー">
+                                    <img src="/images/member.png" class="navi-image">
+                                    <span style="color:#667eea">メンバー"</span>
+                                </a>
+                            </li>
+                            <li class="nav-item head-bond-color">
+                                <a class="nav-link" asp-controller="Members" asp-action="Index" title="利用ガイド">
+                                    <img src="/images/tool3.png" class="navi-image">
+                                    <span style="color:#667eea">利用ガイド</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+                <!-- 右侧登录部分 -->
+                @* <div class="col-lg-2 d-flex justify-content-end"> *@
+                @*     <partial name="_LoginPartial" /> *@
+                @* </div>  *@
             </div>
         </nav>
     </header>
 
     <!-- 主内容区域 -->
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
-            <!-- 面包屑导航 -->
-            <nav aria-label="breadcrumb" class="mt-3">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">首页</a></li>
-                    @if (ViewContext.RouteData.Values["controller"]?.ToString() != "Home")
-                    {
-                        <li class="breadcrumb-item">
-                            <a asp-controller="@ViewContext.RouteData.Values["controller"]">
-                                @ViewContext.RouteData.Values["controller"]
-                            </a>
-                        </li>
-                    }
-                    <li class="breadcrumb-item active" aria-current="page">
-                        @ViewContext.RouteData.Values["action"]
-                    </li>
-                </ol>
-            </nav>
-
-            <!-- 页面内容 -->
             @RenderBody()
         </main>
     </div>
 
     <!-- 页脚 -->
-    <footer class="border-top footer text-muted bg-light">
-        <div class="container py-3">
-            <div class="row">
-                <div class="col-md-6">
-                    &copy; 2025 - 作業管理 進捗管理ツールを使って効率的に作業を進めよう
-
-                </div>
-                <div class="col-md-6 text-md-end">                                        
-                    <a href="#" class="text-muted me-2"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-muted"><i class="fab fa-github"></i></a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @* <footer class="border-top footer text-muted bg-light" style="font-size: 16px"> *@
+    @*     <div class="container py-3"> *@
+    @*         <div class="row"> *@
+    @*             <div class="col-md-10">                 *@
+    @*                 &copy; 2025 - 作業管理 進捗管理ツールを使って効率的に作業を進めよう    *@
+    @*             </div> *@
+    @*             <div class="col-md-2"> *@
+    @*                 <div> *@
+    @*                     Design by 開発1部Bグループ *@
+    @*                 </div> *@
+    @*             </div> *@
+    @*         </div> *@
+    @*     </div> *@
+    @* </footer> *@
 
     <!-- JavaScript 文件 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

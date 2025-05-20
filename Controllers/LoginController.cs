@@ -27,11 +27,11 @@ namespace Login.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(User user)//TODO 登录页面，把下方的红字提醒去掉，改为跳出窗口。
+        public IActionResult Login(User user)
         {
-            if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password))
+            if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.Password)) // TODO 自动保存功能
             {
-                ViewBag.Msg = "ユーザー名またはパスワードが空です";
+                //ViewBag.Msg = "ユーザー名またはパスワードが空です";
                 return View("Index", user);
             }
             else

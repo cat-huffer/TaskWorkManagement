@@ -30,29 +30,54 @@ body {
   text-align: start;
 }*/
 
-/* 全局样式 */
-body {
-    background-color: #f8f9fa;
-    color: #212529;
+html {
+    font-size: 16px;
+    position: relative;
+    min-height: 100%;
+    background-image: url(/images/background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
+header {
+    background-color: transparent !important;
+    position: relative; /* 确保导航栏在背景之上 */
+    z-index: 10; /* 确保导航内容可见 */
+    font-family: KaiTi, 'MS Mincho';
+    font-weight: bold;
+}
+
+/* 全局样式 */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: transparent;
+    font-family: KaiTi, 'MS Mincho';
+}
 /* 导航栏样式 */
 .navbar {
+    background-color: rgba(255, 255, 255, 0) !important; /* 半透明效果 */
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
 /* 主内容区域 */
 main {
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,.05);
-    padding: 20px;
-    margin-top: 20px;
+    flex: 1 0 auto;
+    width: 100%;
+    padding: 20px 0;
+    background-color: transparent;
+    position: relative;
+    z-index: 1;
 }
 
 /* 页脚样式 */
 footer {
-    margin-top: 50px;
+    flex-shrink: 0; /* 决定当 flex 容器空间不足时，该子元素是否允许缩小。flex-shrink: 0 表示 禁止收缩*/
+    margin-top: auto;
+    font-family: KaiTi, 'MS Mincho';
 }
 
 /* 响应式调整 */
@@ -78,21 +103,30 @@ footer {
         background-color: #5a6268;
         color: white;
     }
+.head-bond-color {
+    color: white;
+}
 
-/* 面包屑导航调整 */
-.breadcrumb {
-    background-color: transparent;
-    padding: 0.75rem 0;
-    margin-bottom: 1rem;
+.navi-image {
+    width: 25px;
+    height: 25px; /* 统一高度 */
+    margin-right: 8px; /* 图标和文字间距 */
+    object-fit: contain; /* 保持图片比例 */
+    vertical-align: middle; /* 垂直对齐 */
+}
+
+.nav-link {
+    display: flex !important; /* 启用flex布局 */
+    align-items: center !important; /* 垂直居中 */
+    padding: 0.5rem 1rem !important; /* 适当的内边距 */
+}
+
+.nav-link span {
+    vertical-align: middle; /* 确保文字对齐 */
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

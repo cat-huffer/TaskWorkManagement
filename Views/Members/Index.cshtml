@@ -1,0 +1,39 @@
+﻿@model IEnumerable<TaskWorkManagement.Models.Member>
+
+@{
+    ViewData["Title"] = "インデクス";
+}
+
+<p>
+    <a asp-action="Create">新規作成</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Position)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MemberId">編集</a> |
+                <a asp-action="Details" asp-route-id="@item.MemberId">詳細</a> |
+                <a asp-action="Delete" asp-route-id="@item.MemberId">削除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

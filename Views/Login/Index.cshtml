@@ -16,7 +16,8 @@
             margin: 0; /*外边距（margin）设置为0*/
             padding: 0; /*内边距（padding）设置为0*/
             box-sizing: border-box; /*设置所有元素的盒模型为 border-box*/
-            font-family: 'Meiryo', 'Yu Gothic', sans-serif;
+            font-family: KaiTi, 'MS Mincho';
+            font-weight: bold;
         }
 
         body {
@@ -28,7 +29,7 @@
             display: flex; /*弹性盒子。自动调整项目的大小和间距，以适应不同的屏幕尺寸和内容变化*/
             justify-content: center; /*在弹性盒子的主轴方向上对齐子元素*/
             align-items: center; /*在弹性盒子的交叉轴方向上对齐子元素*/
-            padding: 20px;            
+            padding: 20px;
         }
 
         /* 主标题样式 */
@@ -41,6 +42,7 @@
         .login-header p {
             color: #7f8c8d;
             font-size: 1rem;
+            font-weight: bold;
         }
 
         .login-header {
@@ -57,7 +59,7 @@
             width: 100%; /*宽度为父容器的100%*/
             max-width: 900px;
             animation: fadeIn 0.6s ease-out; /*动画名称，表示淡入效果*/
-            height: 100%; /* 确保容器填满整个列高度 */
+            height: 650px; /* 确保容器填满整个列高度 */
         }
 
 
@@ -70,7 +72,6 @@
                 display: block;
                 margin-bottom: 8px;
                 color: #2c3e50;
-                font-weight: 500; /*字体粗细*/
             }
 
             .form-group input {
@@ -228,21 +229,21 @@
                 <form action="/Login/Login" method="post">
                     <div class="form-group">
                         <label for="UserName">ユーザー名</label>
-                        <input type="text" id="UserName" name="UserName" placeholder="ユーザー名を入力してください">
+                        <input type="text" id="UserName" name="UserName" placeholder="ユーザー名を入力してください" required>
                     </div>
 
                     <div class="form-group password-wrapper">
                         <label for="Password">パスワード</label>
                         <input type="password" id="Password" name="Password"
                                placeholder="パスワードを入力してください"
-                               style="height: 48px; padding-right: 40px;">
+                               style="height: 48px; padding-right: 40px;" required>
                         <button type="button" class="toggle-password-btn" onclick="hideShowPsw()">
                             <img id="showText" src="/images/logincannotsee.png">
                         </button>
                     </div>
 
                     <div class=" remember-me">
-                        <input type="checkbox" id="remember" name="remember">
+                        <input type="checkbox" id="remember" name="remember"> 
                         <label for="remember">次回から自動でログイン</label>
                     </div>
 
