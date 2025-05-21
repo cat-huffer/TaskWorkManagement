@@ -5,11 +5,13 @@
     ViewData["Title"] = "作業管理";
 }
 
+<h1>作業管理</h1>
+
 <div class="row mb-3">
     <div class="col-md-12">
-        <button id="add-task" class="btn btn-success float-right" data-toggle="modal" data-target="#taskModal">
-            <i class="fas fa-plus"></i> 添加任务
-        </button>
+        <a asp-controller="Works" asp-action="Create" class="btn btn-success">
+            <i class="fas fa-plus"></i>添加任务
+        </a>
     </div>
 </div>
 
@@ -19,12 +21,11 @@
             <div class="gantt-cell member-header" style="background-color: lightskyblue">作業</div>
             <div class="gantt-cell member-header" style="background-color: lightskyblue">担当</div>
 
-            @{                
+            @{
                 int currentMonth = Model.StartDate.Month;
                 int currentYear = Model.StartDate.Year;
-                for(int i = 0; i< 12; i++)
+                for (int i = 0; i < 12; i++)
                 {
-                    //做些日期月份上的微调
                     int month = (currentMonth + i - 1) % 12 + 1;
                     int year = (currentMonth + i - 1) / 12 + currentYear;
                     <div class="gantt-month-container">
@@ -34,12 +35,11 @@
                             <div class="gantt-decade-cell" style="background-color: lightskyblue">中旬</div>
                             <div class="gantt-decade-cell" style="background-color: lightskyblue">下旬</div>
                         </div>
-                    </div>                    
+                    </div>
                 }
             }
         </div>
     </div>
-
 
     <div class="gantt-body">
         @foreach (var work in Model.Works)
@@ -56,7 +56,6 @@
                     // 计算任务在时间轴上的位置
                     var startDate = work.StartDate;
                     var endDate = work.DueDate;
-                    var totalMonths = 12;
                     var startOffset = GetDecadeOffset(startDate, Model.StartDate);
                     var endOffset = GetDecadeOffset(endDate, Model.StartDate);
                     var duration = endOffset - startOffset + 1;
@@ -124,32 +123,32 @@
                 </div>
                 <div class="form-group">
                     <label>描述:</label>
-                    <p id="detail-description" class="form-control-static"></p>
+                    <p id="detail-description" class="form-control-plaintext"></p>
                 </div>
                 <div class="form-group">
                     <label>开始日期:</label>
-                    <p id="detail-startdate" class="form-control-static"></p>
+                    <p id="detail-startdate" class="form-control-plaintext"></p>
                 </div>
                 <div class="form-group">
                     <label>截止日期:</label>
-                    <p id="detail-duedate" class="form-control-static"></p>
+                    <p id="detail-duedate" class="form-control-plaintext"></p>
                 </div>
                 <div class="form-group">
                     <label>状态:</label>
-                    <p id="detail-status" class="form-control-static"></p>
+                    <p id="detail-status" class="form-control-plaintext"></p>
                 </div>
                 <div class="form-group">
                     <label>优先级:</label>
-                    <p id="detail-priority" class="form-control-static"></p>
+                    <p id="detail-priority" class="form-control-plaintext"></p>
                 </div>
-                <div class="form-group">
-                    <label>负责人:</label>
-                    <p id="detail-members" class="form-control-static"></p>
-                </div>
+                @* <div class="form-group"> *@
+                @*     <label>负责人:</label> *@
+                @*     <p id="detail-members" class="form-control-plaintext"></p> *@
+                @* </div> *@
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="edit-task">编辑</button>
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" id="edit-task">编辑</button>
             </div>
         </div>
     </div>
@@ -335,8 +334,7 @@
     </style>
 }
 
-
-@section Scripts {
+ @section Scripts {
     <script>
         $(document).ready(function() {
             // 点击任务条显示详情
@@ -364,7 +362,7 @@
 
             // 加载任务详情
             function loadTaskDetails(workId) {
-                $.ajax({
+                $.ajax({ //使用 jQuery 的 $.ajax() 方法发起 HTTP 请求
                     url: '/Works/GetWorkDetails/' + workId,
                     type: 'GET',
                     success: function(data) {
@@ -374,9 +372,8 @@
                         $('#detail-duedate').text(formatDate(data.dueDate));
                         $('#detail-status').text(data.isCompleted ? '已完成' :
                             (new Date(data.dueDate) < new Date() ? '已逾期' : '进行中'));
-                        $('#detail-priority').text(getPriorityText(data.priority));
-                        $('#detail-members').text(data.members.join(', '));
-                        $('#taskDetailModal').data('work-id', workId);
+                        $('#detail-priority').text((int)data.priority);
+                        // $('#detail-members').text(data.members.join(', '));
                     },
                     error: function() {
                         alert('加载任务详情失败');
@@ -391,17 +388,6 @@
                        (date.getMonth() + 1) + '月' +
                        date.getDate() + '日';
             }
-
-            // 获取优先级文本
-            function getPriorityText(priority) {
-                switch(priority) {
-                    case 0: return '低';
-                    case 1: return '中';
-                    case 2: return '高';
-                    default: return '未知';
-                }
-            }
         });
     </script>
-}
-
+    }   

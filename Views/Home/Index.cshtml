@@ -1,7 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "ホームページ";
 }
 
-<div class="text-center">
 
+<style>
+    .container {
+        display: flex;
+        flex-direction: column; 
+        justify-content: center; /* 垂直居中 */
+        align-items: center; /* 水平居中 */
+        min-height: 80vh; 
+    }
+
+    .btn {
+        background-color: #ebf5fb;
+        height: 250px;
+        width: 250px;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 40px;
+        margin-left: 20px;
+        margin-right: 20px;
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        color: #667eea;
+    }
+
+    .btn-row {
+        display: flex;
+        justify-content: center; /* 行内按钮水平居中 */
+        color:red;
+    }
+</style>
+
+<div class="container">
+    <div class="btn-row">
+        <a asp-controller="Works" asp-action="Index" class="btn">作業一覧</a>
+        <a asp-controller="Works" asp-action="Gantt" class="btn">作業管理</a>
+    </div>
+    <div class="btn-row">
+        <a asp-controller="Members" asp-action="Index" class="btn">メンバー</a>
+        <a asp-controller="Works" asp-action="Index" class="btn">利用ガイド</a>
+    </div>
 </div>
+
+
+
+

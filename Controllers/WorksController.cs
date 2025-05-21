@@ -105,7 +105,7 @@ namespace TaskManagement.Controllers
                 dueDate = work.DueDate.ToString("yyyy-MM-dd"),
                 isCompleted = work.IsCompleted,
                 priority = (int)work.Priority,
-                members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList()
+                //members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList()
             });
         }
 
