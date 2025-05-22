@@ -99,52 +99,56 @@
     </div>
 </div>
 
-<!-- 任务详情模态框 -->
-<div class="modal fade" id="taskDetailModal" tabindex="-1" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="taskDetailModalLabel">任务详情</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">@*data-bs-dismiss="modal"：点击时关闭模态框*@
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label>任务名称:</label>
-                    <p id="detail-title" class="form-control-static"></p>
+
+@section modal{
+    <!-- 任务详情模态框 -->
+    <div class="modal fade" id="taskDetailModal" tabindex="-1" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskDetailModalLabel">任务详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">@*data-bs-dismiss="modal"：点击时关闭模态框*@
+                    </button>
                 </div>
-                <div class="mb-3">
-                    <label>描述:</label>
-                    <p id="detail-description" class="form-control-plaintext"></p>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>任务名称:</label>
+                        <p id="detail-title" class="form-control-static"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>描述:</label>
+                        <p id="detail-description" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>开始日期:</label>
+                        <p id="detail-startdate" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>截止日期:</label>
+                        <p id="detail-duedate" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>状态:</label>
+                        <p id="detail-status" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>优先级:</label>
+                        <p id="detail-priority" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label>负责人:</label>
+                        <p id="detail-members" class="form-control-plaintext"></p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label>开始日期:</label>
-                    <p id="detail-startdate" class="form-control-plaintext"></p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-success" id="edit-task">编辑</button>
                 </div>
-                <div class="mb-3">
-                    <label>截止日期:</label>
-                    <p id="detail-duedate" class="form-control-plaintext"></p>
-                </div>
-                <div class="mb-3">
-                    <label>状态:</label>
-                    <p id="detail-status" class="form-control-plaintext"></p>
-                </div>
-                <div class="mb-3">
-                    <label>优先级:</label>
-                    <p id="detail-priority" class="form-control-plaintext"></p>
-                </div>
-                <div class="mb-3">
-                   <label>负责人:</label> 
-                    <p id="detail-members" class="form-control-plaintext"></p> 
-                </div> 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-success" id="edit-task">编辑</button>
             </div>
         </div>
     </div>
-</div>
+}
+
 
 @functions {
     // 计算日期在甘特图中的位置偏移量
