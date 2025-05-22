@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
+    @await RenderSectionAsync("Modal", required: false)
 </head>
 <body>
     <!-- Bootstrap 导航栏 -->
@@ -81,7 +82,6 @@
             </div>
         </nav>
     </header>
-
     <!-- 主内容区域 -->
     <div class="container-fluid">
         <main role="main" class="pb-3">
