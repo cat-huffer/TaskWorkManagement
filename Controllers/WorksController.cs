@@ -84,7 +84,7 @@ namespace TaskManagement.Controllers
             return View(model);
         }
                 
-        [HttpGet]
+        [HttpGet("Works/GetWorkDetails/{id}")]
         public async Task<IActionResult> GetWorkDetails(int id)
         {
             var work = await _context.Work
@@ -104,8 +104,10 @@ namespace TaskManagement.Controllers
                 startDate = work.StartDate.ToString("yyyy-MM-dd"),
                 dueDate = work.DueDate.ToString("yyyy-MM-dd"),
                 isCompleted = work.IsCompleted,
-                priority = (int)work.Priority,
-                //members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList()
+                priority = work.Priority,
+                priorityText = work.Priority.ToString(),
+                members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList(),
+                completedDate = work.CompletedDate?.ToString("yyyy-MM-dd")
             });
         }
 
@@ -123,7 +125,6 @@ namespace TaskManagement.Controllers
             {
                 return NotFound();
             }
-
             return View(work);
         }
 

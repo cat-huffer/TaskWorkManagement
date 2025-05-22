@@ -5,6 +5,7 @@
     ViewData["Title"] = "作業管理";
 }
 
+
 <h1>作業管理</h1>
 
 <div class="row mb-3">
@@ -14,12 +15,11 @@
         </a>
     </div>
 </div>
-
-<div class="gantt-container">
+<div class="gantt-container overflow-auto">
     <div class="gantt-header">
         <div class="gantt-row">
-            <div class="gantt-cell member-header" style="background-color: lightskyblue">作業</div>
-            <div class="gantt-cell member-header" style="background-color: lightskyblue">担当</div>
+            <div class="gantt-cell member-header bg-primary bg-opacity-25">作業</div>
+            <div class="gantt-cell member-header bg-primary bg-opacity-25">担当</div>
 
             @{
                 int currentMonth = Model.StartDate.Month;
@@ -29,11 +29,11 @@
                     int month = (currentMonth + i - 1) % 12 + 1;
                     int year = (currentMonth + i - 1) / 12 + currentYear;
                     <div class="gantt-month-container">
-                        <div class="gantt-month-header" style="background-color: lightskyblue">@year 年 @month 月</div>
+                        <div class="gantt-month-header bg-primary bg-opacity-25">@year 年 @month 月</div>
                         <div class="gantt-decade-container">
-                            <div class="gantt-decade-cell" style="background-color: lightskyblue">上旬</div>
-                            <div class="gantt-decade-cell" style="background-color: lightskyblue">中旬</div>
-                            <div class="gantt-decade-cell" style="background-color: lightskyblue">下旬</div>
+                            <div class="gantt-decade-cell bg-primary bg-opacity-25">上旬</div>
+                            <div class="gantt-decade-cell bg-primary bg-opacity-25">中旬</div>
+                            <div class="gantt-decade-cell bg-primary bg-opacity-25">下旬</div>
                         </div>
                     </div>
                 }
@@ -44,8 +44,8 @@
     <div class="gantt-body">
         @foreach (var work in Model.Works)
         {
-            <div class="gantt-row" data-work-id="@work.WorkId">
-                <div class="gantt-cell member-cell" style="background-color: lightskyblue">
+            <div class="gantt-row mb-2" data-work-id="@work.WorkId">
+                <div class="gantt-cell member-cell bg-primary bg-opacity-10">
                     @work.Title
                 </div>
                 <div class="gantt-cell member-cell">
@@ -53,45 +53,38 @@
                 </div>
 
                 @{
-                    // 计算任务在时间轴上的位置
-                    var startDate = work.StartDate;
-                    var endDate = work.DueDate;
-                    var startOffset = GetDecadeOffset(startDate, Model.StartDate);
-                    var endOffset = GetDecadeOffset(endDate, Model.StartDate);
-                    var duration = endOffset - startOffset + 1;
+                    var startOffset = GetDecadeOffset(work.StartDate, Model.StartDate);
+                    var endOffset = GetDecadeOffset(work.DueDate, Model.StartDate);
 
-                    // 确定任务状态颜色
-                    var statusColor = "lightgreen"; // 默认颜色
+                    var statusClass = "bg-success bg-opacity-25";
                     if (work.IsCompleted)
                     {
-                        statusColor = "lightblue"; // 已完成
+                        statusClass = "bg-info bg-opacity-25";
                     }
-                    else if (DateTime.Today > endDate)
+                    else if (DateTime.Today > work.DueDate)
                     {
-                        statusColor = "salmon"; // 逾期
+                        statusClass = "bg-danger bg-opacity-25";
                     }
-                    else if (DateTime.Today.AddDays(7) > endDate)
+                    else if (DateTime.Today.AddDays(7) > work.DueDate)
                     {
-                        statusColor = "lightyellow"; // 即将到期
+                        statusClass = "bg-warning bg-opacity-25";
                     }
 
-                    // 生成时间轴单元格
                     for (int i = 0; i < 36; i++)
                     {
                         if (i >= startOffset && i <= endOffset)
                         {
-                            <div class="gantt-decade-context task-bar"
-                                 data-work-id="@work.WorkId"
-                                 style="background-color: @statusColor;
-                                            @(i == startOffset ? "border-top-left-radius: 10px; border-bottom-left-radius: 10px;" : "")
-                                            @(i == endOffset ? "border-top-right-radius: 10px; border-bottom-right-radius: 10px;" : "")">
+                            <div class="gantt-decade-context task-bar @statusClass
+                                     @(i == startOffset ? "rounded-start" : "")
+                                     @(i == endOffset ? "rounded-end" : "")"
+                                 data-work-id="@work.WorkId">
                                 @if (i == startOffset)
                                 {
-                                    <div class="task-arrow-start"></div>
+                                    <i class="bi bi-caret-left-fill"></i>
                                 }
                                 @if (i == endOffset)
                                 {
-                                    <div class="task-arrow-end"></div>
+                                    <i class="bi bi-caret-right-fill"></i>
                                 }
                             </div>
                         }
@@ -107,47 +100,46 @@
 </div>
 
 <!-- 任务详情模态框 -->
-<div class="modal fade" id="taskDetailModal" tabindex="-1" role="dialog" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="taskDetailModal" tabindex="-1" aria-labelledby="taskDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="taskDetailModalLabel">任务详情</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">@*data-bs-dismiss="modal"：点击时关闭模态框*@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <div class="mb-3">
                     <label>任务名称:</label>
                     <p id="detail-title" class="form-control-static"></p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>描述:</label>
                     <p id="detail-description" class="form-control-plaintext"></p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>开始日期:</label>
                     <p id="detail-startdate" class="form-control-plaintext"></p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>截止日期:</label>
                     <p id="detail-duedate" class="form-control-plaintext"></p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>状态:</label>
                     <p id="detail-status" class="form-control-plaintext"></p>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     <label>优先级:</label>
                     <p id="detail-priority" class="form-control-plaintext"></p>
                 </div>
-                @* <div class="form-group"> *@
-                @*     <label>负责人:</label> *@
-                @*     <p id="detail-members" class="form-control-plaintext"></p> *@
-                @* </div> *@
+                <div class="mb-3">
+                   <label>负责人:</label> 
+                    <p id="detail-members" class="form-control-plaintext"></p> 
+                </div> 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-success" id="edit-task">编辑</button>
             </div>
         </div>
@@ -158,14 +150,17 @@
     // 计算日期在甘特图中的位置偏移量
     int GetDecadeOffset(DateTime date, DateTime startDate)
     {
-        // 计算月份差
-        var monthDiff = (date.Year - startDate.Year) * 12 + date.Month - startDate.Month;
+        // 计算总天数差
+        var totalDays = (date - startDate).TotalDays;
 
         // 计算旬的位置 (0=上旬, 1=中旬, 2=下旬)
         int decade;
         if (date.Day <= 10) decade = 0;
         else if (date.Day <= 20) decade = 1;
         else decade = 2;
+
+        // 计算月份差
+        var monthDiff = (date.Year - startDate.Year) * 12 + date.Month - startDate.Month;
 
         return monthDiff * 3 + decade;
     }
@@ -334,46 +329,57 @@
     </style>
 }
 
- @section Scripts {
+@section Scripts {
     <script>
-        $(document).ready(function() {
+        $(function() {
+            // 获取模态框DOM元素并创建Bootstrap 5 Modal实例
+            var modalEl = document.getElementById('taskDetailModal');
+            var taskModal = new bootstrap.Modal(modalEl);
+
             // 点击任务条显示详情
-            $('.task-bar').click(function() {
+            $('.task-bar').click(function(e) {
+                e.stopPropagation();
                 var workId = $(this).data('work-id');
                 loadTaskDetails(workId);
-                $('#taskDetailModal').modal('show');
+                taskModal.show();
             });
 
-            // 点击任务行显示详情
-            $('.gantt-row').click(function(e) {
-                if (!$(e.target).hasClass('task-bar')) {
-                    var workId = $(this).data('work-id');
-                    loadTaskDetails(workId);
-                    $('#taskDetailModal').modal('show');
+            // 点击整行也显示详情
+            $('.gantt-row').click(function() {
+                var workId = $(this).data('work-id');
+                loadTaskDetails(workId);
+                taskModal.show();
+            });
+
+            // 编辑按钮点击跳转编辑页面
+            $('#edit-task').click(function() {
+                var workId = $('#taskDetailModal').data('work-id');
+                if (workId) {
+                    window.location.href = '/Works/Edit/' + workId;
                 }
             });
 
-            // 编辑按钮点击事件
-            $('#edit-task').click(function() {
-                var workId = $('#taskDetailModal').data('work-id');
-                // 这里可以跳转到编辑页面或打开编辑模态框
-                window.location.href = '/Works/Edit/' + workId;
-            });
-
-            // 加载任务详情
+            // 加载任务详情函数，异步请求
             function loadTaskDetails(workId) {
-                $.ajax({ //使用 jQuery 的 $.ajax() 方法发起 HTTP 请求
+                $.ajax({
                     url: '/Works/GetWorkDetails/' + workId,
                     type: 'GET',
                     success: function(data) {
+                        $('#taskDetailModal').data('work-id', workId);
                         $('#detail-title').text(data.title);
                         $('#detail-description').text(data.description || '无');
                         $('#detail-startdate').text(formatDate(data.startDate));
                         $('#detail-duedate').text(formatDate(data.dueDate));
-                        $('#detail-status').text(data.isCompleted ? '已完成' :
-                            (new Date(data.dueDate) < new Date() ? '已逾期' : '进行中'));
-                        $('#detail-priority').text((int)data.priority);
-                        // $('#detail-members').text(data.members.join(', '));
+
+                        var statusText = data.isCompleted ? '已完成' :
+                            (new Date(data.dueDate) < new Date() ? '已逾期' : '进行中');
+                        if (data.isCompleted && data.completedDate) {
+                            statusText += ' (' + formatDate(data.completedDate) + ')';
+                        }
+                        $('#detail-status').text(statusText);
+
+                        $('#detail-priority').text(data.priorityText);
+                        $('#detail-members').text(data.members.join(', '));
                     },
                     error: function() {
                         alert('加载任务详情失败');
@@ -381,13 +387,11 @@
                 });
             }
 
-            // 格式化日期
+            // 简单日期格式化函数 yyyy-MM-dd -> N年N月N日
             function formatDate(dateString) {
                 var date = new Date(dateString);
-                return date.getFullYear() + '年' +
-                       (date.getMonth() + 1) + '月' +
-                       date.getDate() + '日';
+                return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
             }
         });
     </script>
-    }   
+}
