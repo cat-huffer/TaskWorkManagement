@@ -7,7 +7,9 @@ using TaskWorkManagement.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // 添加服务到容器。注册了MVC模式所需的服务；支持Controller、View和Razor Pages
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+     .AddRazorRuntimeCompilation(); // <-- 在这里添加运行时编译
+
 
 // 数据库 EntityFrameworkCore 注入。注册数据库上下文
 builder.Services.AddDbContext<TaskWorkManagementContext>(options =>
@@ -39,6 +41,10 @@ if (!app.Environment.IsDevelopment())
 
 //将所有HTTP请求重定向到HTTPS，提高安全性
 app.UseHttpsRedirection();
+
+// 静态文件中间件（放在路由之前）
+app.UseStaticFiles(); // ← 关键位置
+
 app.UseRouting();
 app.UseSession(); // 使用 session 中间件
 app.UseAuthorization();

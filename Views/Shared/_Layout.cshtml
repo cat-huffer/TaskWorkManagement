@@ -67,7 +67,7 @@
                                 </a>
                             </li>
                             <li class="nav-item head-bond-color">
-                                <a class="nav-link" asp-controller="Members" asp-action="Index" title="利用ガイド">
+                                <a class="nav-link" href="/Home/Guide" title="利用ガイド">
                                     <img src="/images/tool3.png" class="navi-image">
                                     <span style="color:#667eea">利用ガイド</span>
                                 </a>
@@ -87,8 +87,19 @@
     <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
+            <script src="https://eqcn.ajz.miesnfu.com/wp-content/plugins/wp-3d-pony/live2dw/lib/L2Dwidget.min.js"></script>
+            <script>
+                //默认使用的萌娘
+                L2Dwidget.init({ "model": { jsonPath:
+                      "https://unpkg.com/live2d-widget-model-miku@1.0.5/assets/miku.model.json",
+                       "scale": 1 }, "display": { "position": "right", "width": 110, "height": 150,
+                       "hOffset": 0, "vOffset": -20 }, "mobile": { "show": true, "scale": 0.5 },
+                       "react": { "opacityDefault": 0.8, "opacityOnHover": 0.1 } });
+            </script>
         </main>
     </div>
+
+    
 
     <!-- 页脚 -->
     @* <footer class="border-top footer text-muted bg-light" style="font-size: 16px"> *@
@@ -110,5 +121,30 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/live2d-widget@latest/lib/L2Dwidget.min.js"></script>
+
+    <script>
+        L2Dwidget.init({
+            "model": {
+                jsonPath: "https://unpkg.com/live2d-widget-model-shizuku@1.0.5/assets/shizuku.model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right",
+                "width": 200,
+                "height": 400,
+                "hOffset": 0,
+                "vOffset": -20
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 0.7,
+                "opacityOnHover": 0.2
+            }
+        });
+    </script>
 </body>
 </html>

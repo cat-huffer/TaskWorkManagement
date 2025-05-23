@@ -49,7 +49,7 @@ namespace TaskManagement.Controllers
         }
 
         // GET: Works/Gantt
-        public async Task<IActionResult> Gantt()
+        public async Task<IActionResult> Gantt()//TODO 拖动左右任务条，保留左侧的名称，人
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)

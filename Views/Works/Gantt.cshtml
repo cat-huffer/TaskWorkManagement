@@ -6,97 +6,107 @@
 }
 
 
-<h1>作業管理</h1>
+<h1 style="text-align:center;color:#7851A9">作業管理</h1>
 
 <div class="row mb-3">
-    <div class="col-md-12">
-        <a asp-controller="Works" asp-action="Create" class="btn btn-success">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <a asp-controller="Works" asp-action="Create" class="btn btn-primary">
             <i class="fas fa-plus"></i>添加任务
         </a>
     </div>
+    <div class="col-md-2"></div>
 </div>
-<div class="gantt-container overflow-auto">
-    <div class="gantt-header">
-        <div class="gantt-row">
-            <div class="gantt-cell member-header bg-primary bg-opacity-25">作業</div>
-            <div class="gantt-cell member-header bg-primary bg-opacity-25">担当</div>
+<div class="row align-items-start">
 
-            @{
-                int currentMonth = Model.StartDate.Month;
-                int currentYear = Model.StartDate.Year;
-                for (int i = 0; i < 12; i++)
-                {
-                    int month = (currentMonth + i - 1) % 12 + 1;
-                    int year = (currentMonth + i - 1) / 12 + currentYear;
-                    <div class="gantt-month-container">
-                        <div class="gantt-month-header bg-primary bg-opacity-25">@year 年 @month 月</div>
-                        <div class="gantt-decade-container">
-                            <div class="gantt-decade-cell bg-primary bg-opacity-25">上旬</div>
-                            <div class="gantt-decade-cell bg-primary bg-opacity-25">中旬</div>
-                            <div class="gantt-decade-cell bg-primary bg-opacity-25">下旬</div>
-                        </div>
-                    </div>
-                }
-            }
-        </div>
-    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="gantt-container overflow-auto">
+            <div class="gantt-header">
+                <div class="gantt-row">
+                    <div class="gantt-cell member-header bg-primary bg-opacity-25">作業</div>
+                    <div class="gantt-cell member-header bg-primary bg-opacity-25">担当</div>
 
-    <div class="gantt-body">
-        @foreach (var work in Model.Works)
-        {
-            <div class="gantt-row mb-2" data-work-id="@work.WorkId">
-                <div class="gantt-cell member-cell bg-primary bg-opacity-10">
-                    @work.Title
-                </div>
-                <div class="gantt-cell member-cell">
-                    @string.Join(", ", work.MemberWorks.Select(mw => mw.Member.MemberName))
-                </div>
-
-                @{
-                    var startOffset = GetDecadeOffset(work.StartDate, Model.StartDate);
-                    var endOffset = GetDecadeOffset(work.DueDate, Model.StartDate);
-
-                    var statusClass = "bg-success bg-opacity-25";
-                    if (work.IsCompleted)
-                    {
-                        statusClass = "bg-info bg-opacity-25";
-                    }
-                    else if (DateTime.Today > work.DueDate)
-                    {
-                        statusClass = "bg-danger bg-opacity-25";
-                    }
-                    else if (DateTime.Today.AddDays(7) > work.DueDate)
-                    {
-                        statusClass = "bg-warning bg-opacity-25";
-                    }
-
-                    for (int i = 0; i < 36; i++)
-                    {
-                        if (i >= startOffset && i <= endOffset)
+                    @{
+                        int currentMonth = Model.StartDate.Month;
+                        int currentYear = Model.StartDate.Year;
+                        for (int i = 0; i < 12; i++)
                         {
-                            <div class="gantt-decade-context task-bar @statusClass
-                                     @(i == startOffset ? "rounded-start" : "")
-                                     @(i == endOffset ? "rounded-end" : "")"
-                                 data-work-id="@work.WorkId">
-                                @if (i == startOffset)
-                                {
-                                    <i class="bi bi-caret-left-fill"></i>
-                                }
-                                @if (i == endOffset)
-                                {
-                                    <i class="bi bi-caret-right-fill"></i>
-                                }
+                            int month = (currentMonth + i - 1) % 12 + 1;
+                            int year = (currentMonth + i - 1) / 12 + currentYear;
+                            <div class="gantt-month-container">
+                                <div class="gantt-month-header bg-primary bg-opacity-25">@year 年 @month 月</div>
+                                <div class="gantt-decade-container">
+                                    <div class="gantt-decade-cell bg-primary bg-opacity-25">上旬</div>
+                                    <div class="gantt-decade-cell bg-primary bg-opacity-25">中旬</div>
+                                    <div class="gantt-decade-cell bg-primary bg-opacity-25">下旬</div>
+                                </div>
                             </div>
                         }
-                        else
-                        {
-                            <div class="gantt-decade-context"></div>
-                        }
                     }
+                </div>
+            </div>
+
+            <div class="gantt-body">
+                @foreach (var work in Model.Works)
+                {
+                    <div class="gantt-row mb-2" data-work-id="@work.WorkId">
+                        <div class="gantt-cell member-cell bg-primary bg-opacity-10">
+                            @work.Title
+                        </div>
+                        <div class="gantt-cell member-cell">
+                            @string.Join(", ", work.MemberWorks.Select(mw => mw.Member.MemberName))
+                        </div>
+
+                        @{
+                            var startOffset = GetDecadeOffset(work.StartDate, Model.StartDate);
+                            var endOffset = GetDecadeOffset(work.DueDate, Model.StartDate);
+
+                            var statusClass = "bg-success bg-opacity-25";
+                            if (work.IsCompleted)
+                            {
+                                statusClass = "bg-info bg-opacity-25";
+                            }
+                            else if (DateTime.Today > work.DueDate)
+                            {
+                                statusClass = "bg-danger bg-opacity-25";
+                            }
+                            else if (DateTime.Today.AddDays(7) > work.DueDate)
+                            {
+                                statusClass = "bg-warning bg-opacity-25";
+                            }
+
+                            for (int i = 0; i < 36; i++)
+                            {
+                                if (i >= startOffset && i <= endOffset)
+                                {
+                                    <div class="gantt-decade-context task-bar @statusClass
+                                         @(i == startOffset ? "rounded-start" : "")
+                                         @(i == endOffset ? "rounded-end" : "")"
+                                         data-work-id="@work.WorkId">
+                                        @if (i == startOffset)
+                                        {
+                                            <i class="bi bi-caret-left-fill"></i>
+                                        }
+                                        @if (i == endOffset)
+                                        {
+                                            <i class="bi bi-caret-right-fill"></i>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="gantt-decade-context"></div>
+                                }
+                            }
+                        }
+                    </div>
                 }
             </div>
-        }
+        </div>
     </div>
+    <div class="col-md-1"></div>
+    
 </div>
 
 

@@ -13,9 +13,11 @@
     <Content Remove="Views\Login\Edit.cshtml" />
     <Content Remove="Views\Shared\_AlertMessages.cshtml" />
     <Content Remove="Views\Shared\_Breadcrumb.cshtml" />
+    <Content Remove="wwwroot\htmlpage.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>

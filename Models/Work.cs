@@ -28,14 +28,17 @@ namespace TaskWorkManagement.Models
         [Display(Name = "完了日")]
         public DateTime? CompletedDate { get; set; }
 
-        [Display(Name = "完了済み")]
-        public bool IsCompleted { get; set; } = false;
+        //[Display(Name = "完了済み")]
+        //public bool IsCompleted { get; set; } = false;
 
         [Display(Name = "優先度")]
         [Required(ErrorMessage = "優先度を入力してください")]
         [Range(0, 2, ErrorMessage = "優先度は0（低い）～2（高い）の範囲で設定してください")]
         public PriorityLevel Priority { get; set; } = PriorityLevel.中;
 
+        /// <summary>
+        /// <remark>一个工作对应一个以上的负责人</remark>
+        /// </summary>
         public ICollection<MemberWork> MemberWorks { get; set; } = new List<MemberWork>();
     }
 }
