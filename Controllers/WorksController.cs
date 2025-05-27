@@ -31,25 +31,37 @@ namespace TaskManagement.Controllers
                 .ToListAsync();
 
             var works = await _context.Work
-                .Include(w => w.MemberWorks)// 类似于SQL中的左连接
+                .Include(w => w.MemberWorks)// 类似于SQL中的左连接.但只用于加载导航属性关联的数据，不会将关联实体的属性"合并"到主实体中
                 .ThenInclude(mw => mw.Member)
                 .OrderBy(w => w.Priority)
                 .ThenByDescending(w => w.DueDate)
                 .ToListAsync();
 
+            var workViewModel = works.Select(w => new WorkItemViewModel // 用于转换集合中的每个元素
+            {
+                WorkId = w.WorkId,
+                Title = w.Title,
+                Description = w.Description,
+                StartDate = w.StartDate,
+                DueDate = w.DueDate,
+                Priority = w.Priority,
+                CompletedDate = w.MemberWorks
+                    .Select(mw => mw.CompletedDate)
+                    .FirstOrDefault(), 
+                Members = string.Join(", ", w.MemberWorks.Select(mw => mw.Member.MemberName))
+            }).ToList();
+
             var model = new WorkIndexViewModel
             {
                 Members = members,
-                Works = works,
-                StartDate = DateTime.Today.AddDays(-7),
-                EndDate = DateTime.Today.AddDays(30)
+                Works = workViewModel
             };
 
             return View(model);
         }
 
         // GET: Works/Gantt
-        public async Task<IActionResult> Gantt()//TODO 拖动左右任务条，保留左侧的名称，人
+        public async Task<IActionResult> Gantt()//TODO 拖动左右任务条，保留左侧的名称
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)
@@ -63,7 +75,6 @@ namespace TaskManagement.Controllers
                 .ToListAsync();
 
             var latestTime = _context.Work
-                .Where(w=>!w.IsCompleted)
                 .OrderByDescending(w => w.StartDate)//将较晚的日期排在前面
                 .Select(w => w.StartDate)
                 .FirstOrDefault();//没有数据时会返回 default(DateTime)
@@ -103,11 +114,10 @@ namespace TaskManagement.Controllers
                 description = work.Description,
                 startDate = work.StartDate.ToString("yyyy-MM-dd"),
                 dueDate = work.DueDate.ToString("yyyy-MM-dd"),
-                isCompleted = work.IsCompleted,
                 priority = work.Priority,
                 priorityText = work.Priority.ToString(),
                 members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList(),
-                completedDate = work.CompletedDate?.ToString("yyyy-MM-dd")
+                completedDate = work.MemberWorks.FirstOrDefault()?.CompletedDate?.ToString("yyyy-MM-dd")
             });
         }
 
@@ -128,26 +138,44 @@ namespace TaskManagement.Controllers
             return View(work);
         }
 
-        // GET: Works/Create
-        public IActionResult Create()
+        // GET: Works/Create. 用于显示空表单（用户填写前）
+        public IActionResult Create() 
         {
             return View();
         }
 
         // POST: Works/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("WorkId,Title,Description,StartDate,DueDate,CompletedDate,IsCompleted,Priority")] Work work)
+        [ValidateAntiForgeryToken] // 用于防止跨站请求伪造攻击。它的作用是确保表单提交的请求来自您的网站，而不是恶意伪造的请求。
+        public async Task<IActionResult> Create([Bind("WorkId,Title,Description,StartDate,DueDate,Priority")] WorkIndexViewModel ViewModel)// 用于控制模型绑定过程中哪些属性可以被绑定，防止过度提交攻击
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //用于验证模型数据的关键检查，如[Required]、[Range]
             {
+                var work = new Work
+                {
+                    Title = ViewModel.Works.First().Title,
+                    Description = ViewModel.Works.First().Description,
+                    StartDate = ViewModel.Works.First().StartDate,
+                    DueDate = ViewModel.Works.First().DueDate,
+                    Priority = ViewModel.Works.First().Priority
+                };
+
                 _context.Add(work);
+                await _context.SaveChangesAsync(); // 必须先保存，才能获取WorkId
+
+                var memberWork = new MemberWork
+                {
+                    CompletedDate = ViewModel.Works.First().CompletedDate,
+                    Director = ViewModel.Works.First().Members
+                };
+
+                _context.Add(memberWork);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index");
             }
-            return View(work);
+            // 如果验证失败
+            return View(ViewModel);
         }
 
         // GET: Works/Edit/5
@@ -167,11 +195,9 @@ namespace TaskManagement.Controllers
         }
 
         // POST: Works/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("WorkId,Title,Description,StartDate,DueDate,CompletedDate,IsCompleted,Priority")] Work work)// bind 限制绑定的属性,只绑定指定的属性
+        public async Task<IActionResult> Edit(int id, [Bind("WorkId,Title,Description,StartDate,IsCompleted,Priority")] Work work)// bind 限制绑定的属性,只绑定指定的属性
         {
             if (id != work.WorkId)
             {

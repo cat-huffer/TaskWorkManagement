@@ -20,8 +20,7 @@ namespace TaskWorkManagement.Models
                             Title = "默认任务",
                             Description = "默认描述",
                             StartDate = DateTime.Now,
-                            DueDate = DateTime.Now.AddDays(7),
-                            IsCompleted = true
+                            DueDate = DateTime.Now.AddDays(7)
                         }
                     );
                 }

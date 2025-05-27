@@ -34,8 +34,5 @@ namespace TaskWorkManagement.Models
         public List<int> SelectedMemberIds { get; set; } = new List<int>();
 
         public List<SelectListItem> AvailableMembers { get; set; }
-
-        [Display(Name = "颜色")]
-        public string Color { get; set; } = "#3498db";
     }
 }

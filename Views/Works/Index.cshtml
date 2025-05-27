@@ -1,5 +1,5 @@
 ﻿@* Views/Works/Index.cshtml *@
-@model TaskWorkManagement.Models.WorkIndexViewModel
+@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
     ViewData["Title"] = "作業一覧";
@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th>作業</th>
+                    <th>責任者</th>
                     <th>優先度</th>
                     <th>開始日</th>
                     <th>期限日</th>
@@ -32,23 +33,25 @@
                             @*@{
                                 var priorityColor = work.Priority switch
                                 {
-                                    2 => "darkblue",      // 高い (高优先级)
-                                    1 => "blue", // 中 (中优先级)
-                                    0 => "deepskyblue",    // 低い (低优先级)
+                                    2 => "darkblue",      // 高い
+                                    1 => "blue", // 中
+                                    0 => "deepskyblue",    // 低い 
                                 };
                             }*@
                             <span style="display: inline-block; width: 10px; height: 10px; background-color: deepskyblue; margin-right: 5px;"></span>
                             @work.Title
                         </td>
                         <td>
+                            @work.Members
+                        </td>
+                        <td>
                             @work.Priority.ToString()
-
                         </td>
                         <td>@work.StartDate.ToString("yyyy-MM-dd")</td>
                         <td>@work.DueDate.ToString("yyyy-MM-dd")</td>
                         <td>@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "なし")</td>
                         <td>
-                            @if (work.IsCompleted)
+                            @if (work.CompletedDate!=null && work.CompletedDate <= work.DueDate)
                             {
                                 <span class="badge badge-success" style="color: black;">完了</span>
                             }

@@ -1,7 +1,7 @@
-﻿@model TaskWorkManagement.Models.Work
+﻿@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "新規作成";
 }
 
 <h1>新規作成</h1>
@@ -36,11 +36,6 @@
                 <label asp-for="CompletedDate" class="control-label"></label>
                 <input asp-for="CompletedDate" class="form-control" />
                 <span asp-validation-for="CompletedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsCompleted" /> @Html.DisplayNameFor(model => model.IsCompleted)
-                </label>
             </div>
             <div class="form-group">
                 <label asp-for="Priority" class="control-label"></label>

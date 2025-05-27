@@ -6,7 +6,7 @@ namespace TaskWorkManagement.Models
     {
         public int MemberId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "メンバー名を入力してください")]
         [StringLength(10)]
         [Display(Name = "メンバー名")]
         public string MemberName { get; set; }
@@ -14,6 +14,9 @@ namespace TaskWorkManagement.Models
         [Display(Name = "ポジション")]
         public string? Position { get; set; }
 
+        /// <summary>
+        /// 导航属性
+        /// </summary>
         public ICollection<MemberWork> MemberWorks { get; set; } = new List<MemberWork>();
     }
 

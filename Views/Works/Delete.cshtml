@@ -1,4 +1,4 @@
-﻿@model TaskWorkManagement.Models.Work
+﻿@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
     ViewData["Title"] = "削除";
@@ -40,12 +40,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.CompletedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsCompleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsCompleted)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Priority)

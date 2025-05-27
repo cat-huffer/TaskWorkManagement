@@ -6,13 +6,22 @@ namespace TaskWorkManagement.Models
     {
         public int MemberWorkId { get; set; }
 
-        [Display(Name = "役割")]
-        public string? Role { get; set; } // 如"负责人","参与者"
 
         public int WorkId { get; set; }
-        public Work Work { get; set; }
-
         public int MemberId { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "完了日")]
+        public DateTime? CompletedDate { get; set; }
+
+        [Required]
+        [Display(Name = "负责人")]
+        public String Director { get; set; }
+
+        /// <summary>
+        /// 导航属性
+        /// </summary>
+        public Work Work { get; set; }
         public Member Member { get; set; }
     }
 }
