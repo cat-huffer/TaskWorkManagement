@@ -17,5 +17,6 @@ namespace TaskWorkManagement.Data
         public DbSet<TaskWorkManagement.Models.Work> Work { get; set; } = default!;
         public DbSet<User> User { get; set; }
         public DbSet<Member> Member { get; set; }
+        public DbSet<MemberWork> MemberWork { get; set; }
     }
 }

@@ -17,6 +17,21 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SelectedMemberIds)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var memberList = ViewBag.Member as List<Member> ?? new List<Member>(); 
+                var selectedIds = Model.SelectedMemberIds ?? new List<int>();
+
+                var memberNames = memberList
+                .Where(m => selectedIds.Contains(m.MemberId))
+                .Select(m => m.MemberName);
+
+                <span>@string.Join(" ", memberNames)</span>
+            }
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>

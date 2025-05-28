@@ -1,5 +1,5 @@
 ﻿@* Views/Works/Index.cshtml *@
-@model TaskWorkManagement.Models.WorkItemViewModel
+@model TaskWorkManagement.Models.WorkIndexViewModel
 
 @{
     ViewData["Title"] = "作業一覧";
@@ -16,7 +16,7 @@
             <thead>
                 <tr>
                     <th>作業</th>
-                    <th>責任者</th>
+                    <th>担当者</th>
                     <th>優先度</th>
                     <th>開始日</th>
                     <th>期限日</th>
@@ -42,7 +42,15 @@
                             @work.Title
                         </td>
                         <td>
-                            @work.Members
+                            @{
+								String showMembers = "";
+                                foreach(var memberId in work.SelectedMemberIds)
+                                {
+									String member = Model.Members.FirstOrDefault(m => m.MemberId == memberId).MemberName;
+									showMembers += member + " ";
+                                }
+                                <span>@showMembers</span>
+                            }
                         </td>
                         <td>
                             @work.Priority.ToString()

@@ -1,4 +1,4 @@
-﻿@model TaskWorkManagement.Models.Work
+﻿@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -15,10 +15,25 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SelectedMemberIds)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                var memberList = ViewBag.Member as List<Member> ?? new List<Member>(); // ViewBag.Members 编译时类型是 dynamic.避免运行时类型不匹配
+                var selectedIds = Model.SelectedMemberIds ?? new List<int>();
+                              
+                var memberNames = memberList
+                .Where(m => selectedIds.Contains(m.MemberId))
+                .Select(m => m.MemberName);
+
+                <span>@string.Join(" ", memberNames)</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">

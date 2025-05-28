@@ -6,7 +6,6 @@ namespace TaskWorkManagement.Models
     {
         public int MemberWorkId { get; set; }
 
-
         public int WorkId { get; set; }
         public int MemberId { get; set; }
 
@@ -14,9 +13,6 @@ namespace TaskWorkManagement.Models
         [Display(Name = "完了日")]
         public DateTime? CompletedDate { get; set; }
 
-        [Required]
-        [Display(Name = "负责人")]
-        public String Director { get; set; }
 
         /// <summary>
         /// 导航属性

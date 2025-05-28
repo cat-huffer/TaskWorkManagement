@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskWorkManagement.Data;
 
@@ -11,9 +12,11 @@ using TaskWorkManagement.Data;
 namespace TaskWorkManagement.Migrations
 {
     [DbContext(typeof(TaskWorkManagementContext))]
-    partial class TaskWorkManagementContextModelSnapshot : ModelSnapshot
+    [Migration("20250527064557_sdsfs")]
+    partial class sdsfs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,6 +56,10 @@ namespace TaskWorkManagement.Migrations
 
                     b.Property<DateTime?>("CompletedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Director")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");

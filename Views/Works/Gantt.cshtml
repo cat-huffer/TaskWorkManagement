@@ -1,5 +1,5 @@
 ﻿@* Views/Works/Gantt.cshtml *@
-@model TaskWorkManagement.Models.WorkGanttViewModel
+@model TaskWorkManagement.Models.WorkIndexViewModel
 
 @{
     ViewData["Title"] = "作業管理";
@@ -28,8 +28,8 @@
                     <div class="gantt-cell member-header bg-primary bg-opacity-25">担当</div>
 
                     @{
-                        int currentMonth = Model.StartDate.Month;
-                        int currentYear = Model.StartDate.Year;
+                        int currentMonth = Model.Works.Where(w=>w.CompletedDate!=null).OrderBy(w=>w.StartDate).Select(w=>w.StartDate).FirstOrDefault().Month;
+                        int currentYear = Model.Works.Where(w => w.CompletedDate != null).OrderBy(w => w.StartDate).Select(w => w.StartDate).FirstOrDefault().Year;
                         for (int i = 0; i < 12; i++)
                         {
                             int month = (currentMonth + i - 1) % 12 + 1;
@@ -54,16 +54,16 @@
                         <div class="gantt-cell member-cell bg-primary bg-opacity-10">
                             @work.Title
                         </div>
-                        <div class="gantt-cell member-cell">
-                            @string.Join(", ", work.MemberWorks.Select(mw => mw.Member.MemberName))
+                        <div class="gantt-cell member-cell bg-primary bg-opacity-10">
+                            @work.Title
                         </div>
 
                         @{
-                            var startOffset = GetDecadeOffset(work.StartDate, Model.StartDate);
-                            var endOffset = GetDecadeOffset(work.DueDate, Model.StartDate);
+                            var startOffset = GetDecadeOffset(work.StartDate, work.StartDate);
+                            var endOffset = GetDecadeOffset(work.DueDate, work.StartDate);
 
                             var statusClass = "bg-success bg-opacity-25";
-                            if (work.IsCompleted)
+                            if (work.CompletedDate != null && work.CompletedDate <= work.DueDate)
                             {
                                 statusClass = "bg-info bg-opacity-25";
                             }
@@ -116,13 +116,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="taskDetailModalLabel">任务详情</h5>
+                    <h5 class="modal-title" id="taskDetailModalLabel">作業詳細</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">@*data-bs-dismiss="modal"：点击时关闭模态框*@
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label>任务名称:</label>
+                        <label>作業:</label>
                         <p id="detail-title" class="form-control-static"></p>
                     </div>
                     <div class="mb-3">
@@ -134,19 +134,19 @@
                         <p id="detail-startdate" class="form-control-plaintext"></p>
                     </div>
                     <div class="mb-3">
-                        <label>截止日期:</label>
+                        <label>締切日:</label>
                         <p id="detail-duedate" class="form-control-plaintext"></p>
                     </div>
                     <div class="mb-3">
-                        <label>状态:</label>
+                        <label>ステータス:</label>
                         <p id="detail-status" class="form-control-plaintext"></p>
                     </div>
                     <div class="mb-3">
-                        <label>优先级:</label>
+                        <label>優先度:</label>
                         <p id="detail-priority" class="form-control-plaintext"></p>
                     </div>
                     <div class="mb-3">
-                        <label>负责人:</label>
+                        <label>担当者:</label>
                         <p id="detail-members" class="form-control-plaintext"></p>
                     </div>
                 </div>
@@ -359,11 +359,11 @@
             });
 
             // 点击整行也显示详情
-            $('.gantt-row').click(function() {
-                var workId = $(this).data('work-id');
-                loadTaskDetails(workId);
-                taskModal.show();
-            });
+            // $('.gantt-row').click(function() {
+            //     var workId = $(this).data('work-id');
+            //     loadTaskDetails(workId);
+            //     taskModal.show();
+            // });
 
             // 编辑按钮点击跳转编辑页面
             $('#edit-task').click(function() {
