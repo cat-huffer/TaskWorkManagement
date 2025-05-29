@@ -3,39 +3,57 @@
 @{
     ViewData["Title"] = "インデクス";
 }
+<br />
+<br />
+<h1 style="text-align:center;color:#7851A9">メンバー</h1>
 
+<br />
+<br />
 
-<div style="display: flex; gap: 10px;">
-    <a asp-action="Create" class="btn btn-success" style="margin-bottom:15px">新規作成</a>
+<div class="row mb-3">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div style="display: flex; gap: 10px;">
+            <a asp-action="Create" class="btn btn-lg btn-outline-success" style="margin-bottom:15px">新規作成</a>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.MemberName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Position)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MemberName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Position)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MemberId">編集</a> |
-                <a asp-action="Details" asp-route-id="@item.MemberId">詳細</a> |
-                <a asp-action="Delete" asp-route-id="@item.MemberId">削除</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="row align-items-start">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MemberName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Position)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MemberName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Position)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.MemberId">編集</a> |
+                            <a asp-action="Details" asp-route-id="@item.MemberId">詳細</a> |
+                            <a asp-action="Delete" asp-route-id="@item.MemberId">削除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-2"></div>
+</div>

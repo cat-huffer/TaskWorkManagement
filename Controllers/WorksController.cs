@@ -65,7 +65,8 @@ namespace TaskManagement.Controllers
 
         // GET: Works/Gantt
         public async Task<IActionResult> Gantt()//TODO 拖动左右任务条，保留左侧的名称
-                                                //TODO 标签栏取消点击触发。空白处也取消点击触发
+                                                //TODO 鼠标停留显示名字
+                                                //TODO 模态框标题居中
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)
@@ -88,7 +89,10 @@ namespace TaskManagement.Controllers
                 Priority = w.Priority,
                 CompletedDate = w.MemberWorks
                     .Select(mw => mw.CompletedDate)
-                    .FirstOrDefault()
+                    .FirstOrDefault(),
+                SelectedMemberIds = w.MemberWorks
+                    .Select(mw => mw.MemberId)
+                    .ToList()
             }).ToList();
 
             var viewModel = new WorkIndexViewModel
@@ -113,7 +117,17 @@ namespace TaskManagement.Controllers
                 return NotFound();
             }
 
-            return Json(new
+            string status = "進行中";
+            if (work.MemberWorks.FirstOrDefault()?.CompletedDate != null && work.MemberWorks.FirstOrDefault()?.CompletedDate <= work.DueDate)
+            {
+                status = "完了";
+            }
+            else if (work.DueDate < DateTime.Today)
+            {
+                status = "期限切れ";
+            }
+
+            return Json( new
             {
                 title = work.Title,
                 description = work.Description,
@@ -122,7 +136,8 @@ namespace TaskManagement.Controllers
                 priority = work.Priority,
                 priorityText = work.Priority.ToString(),
                 members = work.MemberWorks.Select(mw => mw.Member.MemberName).ToList(),
-                completedDate = work.MemberWorks.FirstOrDefault()?.CompletedDate?.ToString("yyyy-MM-dd")
+                completedDate = work.MemberWorks.FirstOrDefault()?.CompletedDate?.ToString("yyyy-MM-dd"),
+                status = status
             });
         }
 
