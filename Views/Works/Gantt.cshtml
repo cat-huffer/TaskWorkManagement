@@ -1,21 +1,27 @@
 ﻿@* Views/Works/Gantt.cshtml *@
 @model TaskWorkManagement.Models.WorkIndexViewModel
 
+
 @{
     ViewData["Title"] = "作業管理";
 }
 
-
+<br />
+<br />
 <h1 style="text-align:center;color:#7851A9">作業管理</h1>
 
+<br />
+<br />
+
+
 <div class="row mb-3">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
         <a asp-controller="Works" asp-action="Create" class="btn btn-primary">
             <i class="fas fa-plus"></i>添加任务
         </a>
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
 </div>
 <div class="row align-items-start">
 
@@ -357,13 +363,6 @@
                 loadTaskDetails(workId);
                 taskModal.show();
             });
-
-            // 点击整行也显示详情
-            // $('.gantt-row').click(function() {
-            //     var workId = $(this).data('work-id');
-            //     loadTaskDetails(workId);
-            //     taskModal.show();
-            // });
 
             // 编辑按钮点击跳转编辑页面
             $('#edit-task').click(function() {
