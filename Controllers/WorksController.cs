@@ -23,9 +23,7 @@ namespace TaskManagement.Controllers
         }
 
         // GET: Works
-        public async Task<IActionResult> Index()//TODO 修改表的排序;修改日期部分
-                                                //TODO 任务列表标签居中
-                                                //TODO 修改完了和完成时间的设计
+        public async Task<IActionResult> Index()
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)
@@ -34,7 +32,7 @@ namespace TaskManagement.Controllers
             var works = await _context.Work
                 .Include(w => w.MemberWorks)// 类似于SQL中的左连接.但只用于加载导航属性关联的数据，不会将关联实体的属性"合并"到主实体中
                 .ThenInclude(mw => mw.Member)
-                .OrderByDescending(w => w.DueDate)
+                .OrderBy(w => w.DueDate)
                 .ThenByDescending(w => w.Priority)
                 .ToListAsync();
 
@@ -64,9 +62,9 @@ namespace TaskManagement.Controllers
         }
 
         // GET: Works/Gantt
-        public async Task<IActionResult> Gantt()//TODO 拖动左右任务条，保留左侧的名称
-                                                //TODO 鼠标停留显示名字
+        public async Task<IActionResult> Gantt()//TODO 拖动左右任务条
                                                 //TODO 模态框标题居中
+                                                //TODO 切换时间：上中下旬，月份，日期
         {
             var members = await _context.Member
                 .OrderBy(m => m.MemberName)
