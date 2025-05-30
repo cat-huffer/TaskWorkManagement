@@ -1,75 +1,157 @@
 ﻿@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
-    ViewData["Title"] = "削除";
+    ViewData["Title"] = "作業項目削除";
 }
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">削除</h1>
 
-<br />
-<br />
-
-<h3 style="text-align:center;color:#7851A9">削除してもよろしいですか？</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SelectedMemberIds)
-        </dt>
-        <dd class="col-sm-10">
-            @{
-                var memberList = ViewBag.Member as List<Member> ?? new List<Member>(); 
-                var selectedIds = Model.SelectedMemberIds ?? new List<int>();
-
-                var memberNames = memberList
-                .Where(m => selectedIds.Contains(m.MemberId))
-                .Select(m => m.MemberName);
-
-                <span>@string.Join(" ", memberNames)</span>
-            }
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DueDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DueDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompletedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompletedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Priority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Priority)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="WorkId" />
-        <input type="submit" value="削除" class="btn btn-danger" /> |
-        <a asp-action="Index">リストに戻る</a>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="text-center mb-0"><i class="bi bi-exclamation-triangle me-2"></i>作業項目削除</h2>
+                </div>
+                <div class="card-body p-4">
+                    <h4 class="text-center text-danger mb-4"><i class="bi bi-question-circle-fill me-2"></i>この作業項目を削除してもよろしいですか？</h4>
+                    
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-octagon-fill me-2"></i>この操作は取り消せません。削除するとすべての関連データも失われます。
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Title)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                <strong>@Html.DisplayFor(model => model.Title)</strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @Html.DisplayFor(model => model.Description)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            担当者
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @{
+                                    var memberList = ViewBag.Member as List<Member> ?? new List<Member>();
+                                    var selectedIds = Model.SelectedMemberIds ?? new List<int>();
+                                    var memberNames = memberList
+                                        .Where(m => selectedIds.Contains(m.MemberId))
+                                        .Select(m => m.MemberName);
+                                    
+                                    foreach (var name in memberNames)
+                                    {
+                                        <span class="badge bg-danger me-2 mb-2">
+                                            <i class="bi bi-person-fill me-1"></i>@name
+                                        </span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.StartDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-event text-danger me-2"></i>
+                                @Html.DisplayFor(model => model.StartDate)
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.DueDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-x text-danger me-2"></i>
+                                @Html.DisplayFor(model => model.DueDate)
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.CompletedDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-check text-danger me-2"></i>
+                                @Html.DisplayFor(model => model.CompletedDate)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Priority)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @{
+                                    var priorityClass = Model.Priority switch
+                                    {
+                                        PriorityLevel.高い => "text-danger",
+                                        PriorityLevel.中 => "text-warning",
+                                        PriorityLevel.低い => "text-success",
+                                        _ => ""
+                                    };
+                                }
+                                <span class="@priorityClass">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    @Html.DisplayFor(model => model.Priority)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form asp-action="Delete" class="mt-4 pt-3 border-top">
+                        <input type="hidden" asp-for="WorkId" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i> リストに戻る
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash-fill me-1"></i> 削除する
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 10px;
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+        .border-danger {
+            border: 1px solid #dc3545 !important;
+        }
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+        .badge.bg-danger {
+            padding: 0.5em 0.75em;
+            font-size: 0.9em;
+        }
+    </style>
+}

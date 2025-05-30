@@ -4,93 +4,183 @@
 @{
     ViewData["Title"] = "作業一覧";
 }
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">作業一覧</h1>
 
-<br />
-<br />
-<div class="row mb-3">
-<div class="col-md-2"></div>
-<div class="col-md-8">
-    <a asp-action="Create" class="btn btn-lg btn-outline-success">新規作成</a>
-</div>
-<div class="col-md-2"></div>
-</div>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="h4 mb-0 text-center"><i class="fas fa-tasks me-2"></i>作業一覧</h2>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="search-box">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="作業検索..." id="workSearch">
+                            </div>
+                        </div>
+                        <a asp-action="Create" class="btn btn-outline-success">
+                            <i class="fas fa-user-plus me-2"></i>新規登録
+                        </a>
+                    </div>
 
-@*创建水平排列的弹性容器，并控制其子元素（列）在垂直方向上的对齐方式*@
-<div class="row align-items-start"> 
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>作業</th>
-                    <th>担当者</th>
-                    <th>優先度</th>
-                    <th>開始日</th>
-                    <th>期限日</th>
-                    <th>完了日</th>
-                    <th>状態</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var work in Model.Works)
-                {
-                    <tr>
-                        <td>
-                            @*@{
-                                var priorityColor = work.Priority switch
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">作業</th>
+                                    <th class="align-middle">担当者</th>
+                                    <th class="align-middle text-center">優先度</th>
+                                    <th class="align-middle text-center">開始日</th>
+                                    <th class="align-middle text-center">期限日</th>
+                                    <th class="align-middle text-center">完了日</th>
+                                    <th class="align-middle text-center">状態</th>
+                                    <th class="align-middle text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var work in Model.Works)
                                 {
-                                    2 => "darkblue",      // 高い
-                                    1 => "blue", // 中
-                                    0 => "deepskyblue",    // 低い 
-                                };
-                            }*@
-                            <span style="display: inline-block; width: 10px; height: 10px; background-color: deepskyblue; margin-right: 5px;"></span>
-                            @work.Title
-                        </td>
-                        <td>
-                            @{
-								String showMembers = "";
-                                foreach(var memberId in work.SelectedMemberIds)
-                                {
-									String member = Model.Members.FirstOrDefault(m => m.MemberId == memberId).MemberName;
-									showMembers += member + " ";
+                                    <tr>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <span class="priority-indicator me-2" data-priority="@work.Priority"></span>
+                                                @work.Title
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            @{
+                                                String showMembers = "";
+                                                foreach (var memberId in work.SelectedMemberIds)
+                                                {
+                                                    String member = Model.Members.FirstOrDefault(m => m.MemberId == memberId)?.MemberName ?? "";
+                                                    showMembers += member + " ";
+                                                }
+                                                <span>@showMembers</span>
+                                            }
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <span data-priority="@work.Priority"></span>
+                                                @work.Priority
+                                            </div>
+                                        </td>
+
+                                        <td class="align-middle text-center">@work.StartDate.ToString("yyyy-MM-dd")</td>
+                                        <td class="align-middle text-center">@work.DueDate.ToString("yyyy-MM-dd")</td>
+                                        <td class="align-middle text-center">@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                                        <td class="align-middle text-center">
+                                            @if (work.CompletedDate != null && work.CompletedDate <= work.DueDate)
+                                            {
+                                                <span class="badge bg-success bg-opacity-10 text-success">
+                                                    <i class="fas fa-check-circle me-1"></i>完了
+                                                </span>
+                                            }
+                                            else if (work.DueDate < DateTime.Today)
+                                            {
+                                                <span class="badge bg-danger bg-opacity-10 text-danger">
+                                                    <i class="fas fa-exclamation-circle me-1"></i>期限切れ
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary bg-opacity-10 text-primary">
+                                                    <i class="fas fa-spinner me-1"></i>進行中
+                                                </span>
+                                            }
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a asp-action="Edit" asp-route-id="@work.WorkId" class="btn btn-outline-primary" title="編集">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@work.WorkId" class="btn btn-outline-info" title="詳細">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@work.WorkId" class="btn btn-outline-danger" title="削除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
-                                <span>@showMembers</span>
-                            }
-                        </td>
-                        <td>
-                            @work.Priority.ToString()
-                        </td>
-                        <td>@work.StartDate.ToString("yyyy-MM-dd")</td>
-                        <td>@work.DueDate.ToString("yyyy-MM-dd")</td>
-                        <td>@(work.CompletedDate?.ToString("yyyy-MM-dd") ?? "なし")</td>
-                        <td>
-                            @if (work.CompletedDate!=null && work.CompletedDate <= work.DueDate)
-                            {
-                                <span class="badge badge-success" style="color: black;">完了</span>
-                            }
-                            else if (work.DueDate < DateTime.Today)
-                            {
-                                <span class="badge badge-danger" style="color: red;">期限切れ</span>
-                            }
-                            else
-                            {
-                                <span class="badge badge-primary" style="color: green;">進行中</span>
-                            }
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-primary">編集</a>
-                            <a asp-action="Details" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-info">詳細</a>
-                            <a asp-action="Delete" asp-route-id="@work.WorkId" class="btn btn-sm btn-outline-danger">削除</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2"></div>
 </div>
+
+<style>
+    .bg-purple {
+        background-color: #7851A9;
+    }
+
+    .priority-indicator {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: deepskyblue;
+    }
+
+        .priority-indicator[data-priority="2"] {
+            background-color: #dc3545; /* 高い - 赤色 */
+        }
+
+        .priority-indicator[data-priority="1"] {
+            background-color: #ffc107; /* 中 - 黄色 */
+        }
+
+        .priority-indicator[data-priority="0"] {
+            background-color: #28a745; /* 低い - 緑色 */
+        }
+
+    .priority-badge[data-priority="2"] {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .priority-badge[data-priority="1"] {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .priority-badge[data-priority="0"] {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(120, 81, 169, 0.05);
+    }
+
+    .card {
+        border-radius: 0.5rem;
+        border: none;
+    }
+
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .search-box {
+        width: 300px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $("#workSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

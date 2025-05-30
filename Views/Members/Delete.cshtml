@@ -1,36 +1,79 @@
 ﻿@model TaskWorkManagement.Models.Member
 
 @{
-    ViewData["Title"] = "削除";
+    ViewData["Title"] = "删除成员";
 }
 
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">削除</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="text-center mb-0"><i class="bi bi-exclamation-triangle me-2"></i>删除确认</h2>
+                </div>
+                <div class="card-body p-4">
+                    <h4 class="text-center text-danger mb-4">您确定要删除此成员吗？</h4>
 
-<br />
-<br />
-<h3 style="text-align:center;color:#7851A9">本当に削除してもよろしいですか？</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MemberName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MemberName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MemberId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">リストに戻る</a>
-    </form>
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>此操作无法撤销，请谨慎操作！
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.MemberName)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @Html.DisplayFor(model => model.MemberName)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Position)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @Html.DisplayFor(model => model.Position)
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete" class="mt-4 pt-3 border-top">
+                        <input type="hidden" asp-for="MemberId" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> 返回列表
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> 确认删除
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 10px;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+
+        .border-danger {
+            border: 1px solid #dc3545 !important;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+    </style>
+}

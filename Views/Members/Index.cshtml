@@ -1,59 +1,148 @@
 ﻿@model IEnumerable<TaskWorkManagement.Models.Member>
 
 @{
-    ViewData["Title"] = "インデクス";
+    ViewData["Title"] = "メンバー管理";
 }
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">メンバー</h1>
 
-<br />
-<br />
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="h4 mb-0 text-center"><i class="fas fa-users me-2"></i>メンバー一覧</h2>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="search-box">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="メンバー検索..." id="memberSearch">
+                            </div>
+                        </div>
+                        <a asp-action="Create" class="btn btn-outline-success">
+                            <i class="fas fa-user-plus me-2"></i>新規登録
+                        </a>
+                    </div>
 
-<div class="row mb-3">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <div style="display: flex; gap: 10px;">
-            <a asp-action="Create" class="btn btn-lg btn-outline-success" style="margin-bottom:15px">新規作成</a>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="w-40">@Html.DisplayNameFor(model => model.MemberName)</th>
+                                    <th class="w-40">@Html.DisplayNameFor(model => model.Position)</th>
+                                    <th class="w-20 text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar me-3">
+                                                    <span class="avatar-text bg-primary text-white">
+                                                        @item.MemberName.Substring(0, 1)
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">@Html.DisplayFor(modelItem => item.MemberName)</h6>
+                                                    <small class="text-muted">ID: @item.MemberId</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge position-badge">
+                                                @Html.DisplayFor(modelItem => item.Position)
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a asp-action="Edit" asp-route-id="@item.MemberId" class="btn btn-outline-primary" title="編集">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.MemberId" class="btn btn-outline-info" title="詳細">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.MemberId" class="btn btn-outline-danger" title="削除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-2"></div>
 </div>
 
-<div class="row align-items-start">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MemberName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Position)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MemberName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Position)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.MemberId">編集</a> |
-                            <a asp-action="Details" asp-route-id="@item.MemberId">詳細</a> |
-                            <a asp-action="Delete" asp-route-id="@item.MemberId">削除</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="col-md-2"></div>
-</div>
+<style>
+    .bg-purple {
+        background-color: #7851A9;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: bold;
+    }
+
+    .avatar-text {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 1rem;
+    }
+
+    .position-badge {
+        background-color: #e9ecef;
+        color: #495057;
+        padding: 0.35em 0.65em;
+        font-size: 0.85em;
+        border-radius: 0.25rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(120, 81, 169, 0.05);
+    }
+
+    .card {
+        border-radius: 0.5rem;
+        border: none;
+    }
+
+    .w-40 {
+        width: 40%;
+    }
+
+    .w-20 {
+        width: 20%;
+    }
+
+    .search-box {
+        width: 300px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $("#memberSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

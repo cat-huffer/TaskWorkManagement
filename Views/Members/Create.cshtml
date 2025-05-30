@@ -1,41 +1,125 @@
 ﻿@model TaskWorkManagement.Models.Member
 
 @{
-    ViewData["Title"] = "新規作成";
+    ViewData["Title"] = "新規メンバー作成";
 }
 
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">新規作成</h1>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="text-center mb-0"><i class="bi bi-person-plus me-2"></i>新規メンバー作成</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<br />
-<br />
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="MemberName" class="control-label"></label>
-                <input asp-for="MemberName" class="form-control" />
-                <span asp-validation-for="MemberName" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="MemberName" class="form-label fw-bold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-person-fill text-purple"></i>
+                                </span>
+                                <input asp-for="MemberName" class="form-control form-control-lg" placeholder="メンバー名を入力" required />
+                            </div>
+                            <span asp-validation-for="MemberName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Position" class="form-label fw-bold"></label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-briefcase-fill text-purple"></i>
+                                </span>
+                                <input asp-for="Position" class="form-control form-control-lg" placeholder="役職を入力" required />
+                            </div>
+                            <span asp-validation-for="Position" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary me-md-2">
+                                <i class="bi bi-arrow-left"></i> リストに戻る
+                            </a>
+                            <button type="submit" class="btn btn-purple">
+                                <i class="bi bi-save"></i> 作成
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Position" class="control-label"></label>
-                <input asp-for="Position" class="form-control" />
-                <span asp-validation-for="Position" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">リストに戻る</a>
-</div>
+@section Styles {
+    <style>
+        .bg-purple {
+            background-color: #7851A9 !important;
+        }
+
+        .btn-purple {
+            background-color: #7851A9;
+            color: white;
+        }
+
+            .btn-purple:hover {
+                background-color: #5d3d8a;
+                color: white;
+            }
+
+        .text-purple {
+            color: #7851A9 !important;
+        }
+
+        .card {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+
+        .form-control {
+            border-left: none;
+        }
+
+        .input-group-text {
+            border-right: none;
+            background-color: #f8f9fa !important;
+        }
+
+        .placeholder-jp::placeholder {
+            color: #6c757d;
+            opacity: 0.7;
+        }
+    </style>
+}
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // 添加Bootstrap验证样式
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 }

@@ -2,84 +2,210 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "作業項目編集";
 }
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">編集</h1>
 
-<br />
-<br />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="text-center mb-0"><i class="bi bi-pencil-square me-2"></i>作業項目編集</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="WorkId" />
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="WorkId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">担当者</label>
-                <div>
-                    @if (Model.AvailableMembers != null)
-                    {
-                        foreach (var member in Model.AvailableMembers)
-                        {
-                            <div class="form-check">
-                                <input class="form-check-input"
-                                       type="checkbox"
-                                       name="SelectedMemberIds"
-                                       value="@member.Value"
-                                @(Model.SelectedMemberIds != null && Model.SelectedMemberIds.Contains(int.Parse(member.Value)) ? "checked" : "") />
-                                <label class="form-check-label">@member.Text</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="Title" class="form-label fw-bold">タイトル</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-card-heading text-purple"></i>
+                                        </span>
+                                        <input asp-for="Title" class="form-control" placeholder="作業タイトルを入力" required />
+                                    </div>
+                                    <span asp-validation-for="Title" class="text-danger small"></span>
+                                </div>
                             </div>
-                        }
-                    }
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="Priority" class="form-label fw-bold">優先度</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-exclamation-triangle text-purple"></i>
+                                        </span>
+                                        <select asp-for="Priority" asp-items="Html.GetEnumSelectList<PriorityLevel>()" class="form-select" required>
+                                            <option value="">--優先度を選択--</option>
+                                        </select>
+                                    </div>
+                                    <span asp-validation-for="Priority" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-bold">説明</label>
+                            <textarea asp-for="Description" class="form-control" rows="3" placeholder="作業内容の詳細を入力"></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">担当者</label>
+                            <div class="card border-0 bg-light p-3">
+                                <div class="row">
+                                    @if (Model.AvailableMembers != null)
+                                    {
+                                        foreach (var member in Model.AvailableMembers)
+                                        {
+                                            <div class="col-md-4 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           name="SelectedMemberIds"
+                                                           value="@member.Value"
+                                                           id="member-@member.Value"
+                                                    @(Model.SelectedMemberIds != null && Model.SelectedMemberIds.Contains(int.Parse(member.Value)) ? "checked" : "") />
+                                                    <label class="form-check-label" for="member-@member.Value">
+                                                        <i class="bi bi-person-check me-1"></i>@member.Text
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <label asp-for="StartDate" class="form-label fw-bold">開始日</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-calendar-event text-purple"></i>
+                                        </span>
+                                        <input asp-for="StartDate" type="date" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="StartDate" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <label asp-for="DueDate" class="form-label fw-bold">期限日</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-calendar-x text-purple"></i>
+                                        </span>
+                                        <input asp-for="DueDate" type="date" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="DueDate" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <label asp-for="CompletedDate" class="form-label fw-bold">完了日</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-calendar-check text-purple"></i>
+                                        </span>
+                                        <input asp-for="CompletedDate" type="date" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="CompletedDate" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <div>
+                                <a asp-action="Index" class="btn btn-outline-secondary me-2">
+                                    <i class="bi bi-list-ul"></i> リストに戻る
+                                </a>
+                                <a asp-action="Gantt" class="btn btn-outline-primary">
+                                    <i class="bi bi-kanban"></i> 作業管理に戻る
+                                </a>
+                            </div>
+                            <button type="submit" class="btn btn-purple">
+                                <i class="bi bi-save"></i> 保存
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DueDate" class="control-label"></label>
-                <input asp-for="DueDate" class="form-control" />
-                <span asp-validation-for="DueDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CompletedDate" class="control-label"></label>
-                <input asp-for="CompletedDate" class="form-control" />
-                <span asp-validation-for="CompletedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Priority" class="control-label"></label>
-                <select asp-for="Priority" asp-items="Html.GetEnumSelectList<PriorityLevel>()" class="form-control">
-                    <option value="">--優先度を選択してください--</option>
-                </select>
-                <span asp-validation-for="Priority" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="保存" class="btn btn-primary" style="margin-bottom:10px;margin-top:10px"/>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div style="display: flex; gap: 10px;">
-    <a asp-action="Index" class="btn btn-success">リストに戻る</a>
-    <a asp-action="Gantt" class="btn btn-success">作業管理に戻る</a>
-</div>
+@section Styles {
+    <style>
+        .bg-purple {
+            background-color: #7851A9 !important;
+        }
+
+        .btn-purple {
+            background-color: #7851A9;
+            color: white;
+        }
+
+            .btn-purple:hover {
+                background-color: #5d3d8a;
+                color: white;
+            }
+
+        .text-purple {
+            color: #7851A9 !important;
+        }
+
+        .card {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+
+        .form-control, .form-select {
+            border-left: none;
+        }
+
+        .input-group-text {
+            border-right: none;
+            background-color: #f8f9fa !important;
+        }
+
+        .form-check-input:checked {
+            background-color: #7851A9;
+            border-color: #7851A9;
+        }
+    </style>
+}
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // 添加Bootstrap验证样式
+        (function () {
+            'use strict'
+
+            var forms = document.querySelectorAll('.needs-validation')
+
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
 }

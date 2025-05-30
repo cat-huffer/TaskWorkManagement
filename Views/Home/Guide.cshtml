@@ -1,17 +1,172 @@
 ﻿@{
     ViewData["Title"] = "利用ガイド";
 }
-<head>
-    <br />
-    <br />
-    <h1 style="text-align:center;color:#7851A9">利用ガイド</h1>
 
-    <br />
-    <br />
-</head>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="h4 mb-0 text-center"><i class="fas fa-question-circle me-2"></i>利用ガイド</h2>
+                </div>
+                <div class="card-body">
+                    <div class="guide-content">
+                        <div class="guide-section">
+                            <h3 class="guide-title"><i class="fas fa-sort-amount-down me-2"></i>タスクの並び順</h3>
+                            <div class="guide-detail">
+                                <p>システムではタスクを以下の順序で自動的に並べ替えます：</p>
+                                <ol class="step-list">
+                                    <li>
+                                        <span class="step-number">1</span>
+                                        <strong>優先度</strong> (高い → 低い)
+                                        <div class="priority-example mt-2">
+                                            <span class="badge priority-high me-2">高</span>
+                                            <span class="badge priority-medium me-2">中</span>
+                                            <span class="badge priority-low">低</span>
+                                        </div>
+                                    </li>
+                                    <li class="mt-3">
+                                        <span class="step-number">2</span>
+                                        <strong>期限日</strong> (近い → 遠い)
+                                        <div class="date-example mt-2">
+                                            <span class="badge date-badge me-2">2023-10-01</span>
+                                            <span class="badge date-badge me-2">2023-10-15</span>
+                                            <span class="badge date-badge">2023-11-01</span>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
 
-<p>
-    甘特图排序：先按优先度排，再按照截止时间
-</p>
+                        <div class="guide-section mt-5">
+                            <h3 class="guide-title"><i class="fas fa-tasks me-2"></i>基本操作</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <div class="feature-icon text-primary">
+                                            <i class="fas fa-plus-circle fa-2x"></i>
+                                        </div>
+                                        <h4>新規作成</h4>
+                                        <p>「新規作成」ボタンで新しいタスクを追加できます</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="feature-card">
+                                        <div class="feature-icon text-info">
+                                            <i class="fas fa-edit fa-2x"></i>
+                                        </div>
+                                        <h4>編集</h4>
+                                        <p>各タスクの編集アイコンで内容を変更できます</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="feature-card">
+                                        <div class="feature-icon text-success">
+                                            <i class="fas fa-check-circle fa-2x"></i>
+                                        </div>
+                                        <h4>完了処理</h4>
+                                        <p>タスク完了時はステータスを更新してください</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="feature-card">
+                                        <div class="feature-icon text-danger">
+                                            <i class="fas fa-trash-alt fa-2x"></i>
+                                        </div>
+                                        <h4>削除</h4>
+                                        <p>不要なタスクは削除アイコンで消去できます</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<style>
+    .bg-purple {
+        background-color: #7851A9;
+    }
 
+    .guide-section {
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        background-color: #f8f9fa;
+        margin-bottom: 1.5rem;
+    }
+
+    .guide-title {
+        color: #7851A9;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .step-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+        .step-list li {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+    .step-number {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-color: #7851A9;
+        color: white;
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .priority-high {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .priority-medium {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .priority-low {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .date-badge {
+        background-color: #e9ecef;
+        color: #495057;
+        font-weight: normal;
+    }
+
+    .feature-card {
+        text-align: center;
+        padding: 1.5rem;
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        height: 100%;
+    }
+
+    .feature-icon {
+        margin-bottom: 1rem;
+    }
+
+    .card {
+        border-radius: 0.5rem;
+        border: none;
+    }
+</style>

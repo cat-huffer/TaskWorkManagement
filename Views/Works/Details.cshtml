@@ -1,73 +1,168 @@
 ﻿@model TaskWorkManagement.Models.WorkItemViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "作業項目詳細";
 }
-<br />
-<br />
-<h1 style="text-align:center;color:#7851A9">詳細</h1>
 
-<br />
-<br />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-purple text-white">
+                    <h2 class="text-center mb-0"><i class="bi bi-card-text me-2"></i>作業項目詳細</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Title)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                <h5 class="mb-0">@Html.DisplayFor(model => model.Title)</h5>
+                            </div>
+                        </div>
+                    </div>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.SelectedMemberIds)
-        </dt>
-        <dd class="col-sm-10">
-            @{
-                var memberList = ViewBag.Member as List<Member> ?? new List<Member>(); // ViewBag.Members 编译时类型是 dynamic.避免运行时类型不匹配
-                var selectedIds = Model.SelectedMemberIds ?? new List<int>();
-                              
-                var memberNames = memberList
-                .Where(m => selectedIds.Contains(m.MemberId))
-                .Select(m => m.MemberName);
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @Html.DisplayFor(model => model.Description)
+                            </div>
+                        </div>
+                    </div>
 
-                <span>@string.Join(" ", memberNames)</span>
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.SelectedMemberIds)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @{
+                                    var memberList = ViewBag.Member as List<Member> ?? new List<Member>();
+                                    var selectedIds = Model.SelectedMemberIds ?? new List<int>();
+                                    var memberNames = memberList
+                                    .Where(m => selectedIds.Contains(m.MemberId))
+                                    .Select(m => m.MemberName);
+
+                                    foreach (var name in memberNames)
+                                    {
+                                        <span class="badge bg-purple me-2 mb-2">
+                                            <i class="bi bi-person-fill me-1"></i>@name
+                                        </span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.StartDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-event text-purple me-2"></i>
+                                @Html.DisplayFor(model => model.StartDate)
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.DueDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-x text-purple me-2"></i>
+                                @Html.DisplayFor(model => model.DueDate)
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="text-md-end fw-bold text-muted">
+                                @Html.DisplayNameFor(model => model.CompletedDate)
+                            </div>
+                            <div class="p-3 bg-light rounded text-center">
+                                <i class="bi bi-calendar-check text-purple me-2"></i>
+                                @Html.DisplayFor(model => model.CompletedDate)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-md-end fw-bold text-muted">
+                            @Html.DisplayNameFor(model => model.Priority)
+                        </div>
+                        <div class="col-md-9">
+                            <div class="p-3 bg-light rounded">
+                                @{
+                                    var priorityClass = Model.Priority switch
+                                    {
+                                        PriorityLevel.低い => "text-danger",
+                                        PriorityLevel.中 => "text-warning",
+                                        PriorityLevel.高い => "text-success",
+                                        _ => ""
+                                    };
+                                }
+                                <span class="@priorityClass">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    @Html.DisplayFor(model => model.Priority)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-list-ul me-1"></i> リストに戻る
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model?.WorkId" class="btn btn-purple">
+                            <i class="bi bi-pencil me-1"></i> 編集
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .bg-purple {
+            background-color: #7851A9 !important;
+        }
+
+        .btn-purple {
+            background-color: #7851A9;
+            color: white;
+        }
+
+            .btn-purple:hover {
+                background-color: #5d3d8a;
+                color: white;
             }
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DueDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DueDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CompletedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CompletedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Priority)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Priority)
-        </dd>
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.WorkId">編集</a> |
-    <a asp-action="Index">リストに戻る</a>
-</div>
+
+        .text-purple {
+            color: #7851A9 !important;
+        }
+
+        .badge.bg-purple {
+            background-color: #7851A9 !important;
+            padding: 0.5em 0.75em;
+            font-size: 0.9em;
+        }
+
+        .card {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+    </style>
+}

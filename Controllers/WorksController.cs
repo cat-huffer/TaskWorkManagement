@@ -34,8 +34,8 @@ namespace TaskManagement.Controllers
             var works = await _context.Work
                 .Include(w => w.MemberWorks)// 类似于SQL中的左连接.但只用于加载导航属性关联的数据，不会将关联实体的属性"合并"到主实体中
                 .ThenInclude(mw => mw.Member)
-                .OrderBy(w => w.Priority)
-                .ThenByDescending(w => w.DueDate)
+                .OrderByDescending(w => w.DueDate)
+                .ThenByDescending(w => w.Priority)
                 .ToListAsync();
 
             var workViewModel = works.Select(w => new WorkItemViewModel // 转换集合中的每个元素
