@@ -10,7 +10,7 @@ using TaskWorkManagement.Models;
 
 namespace TaskWorkManagement.Controllers
 {
-    public class MembersController : Controller //
+    public class MembersController : Controller 
     {
         private readonly TaskWorkManagementContext _context;
 
